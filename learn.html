@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physiognomy Learning Hub (Minimalist & Sporty)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom Styles for Sporty/Minimalist Aesthetic */
+        :root {
+            --bg-dark: #1a1a1a; /* Dark background */
+            --card-bg: #282828; /* Slightly lighter card background */
+            --accent-primary: #00BCD4; /* Electric Cyan/Blue */
+            --text-light: #f0f0f0; 
+            --text-muted: #aaaaaa;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+        }
+        /* Override Tailwind defaults for a sharper feel */
+        .app-container {
+            min-height: 10vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 0.75rem; /* Slightly reduced rounding */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Subtle dark shadow */
+        }
+        /* Score boxes: High-contrast, dynamic feel */
+        .score-box {
+            background-color: #333333;
+            border: 2px solid var(--card-bg);
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .score-box:hover {
+            transform: scale(1.05); /* Aggressive hover scale for sporty feel */
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 15px var(--accent-primary); 
+        }
+        /* Active Tab Style */
+        .tab-active {
+            border-bottom: 4px solid var(--accent-primary);
+            color: var(--accent-primary);
+            background-color: var(--card-bg);
+            border-radius: 0.75rem 0.75rem 0 0;
+        }
+        /* Input Radio Styling */
+        input[type="radio"]:checked + span {
+            color: var(--accent-primary);
+            font-weight: 600;
+        }
+        /* Custom Radio button colors */
+        .form-radio:checked {
+            border-color: var(--accent-primary);
+        }
+        .form-radio:checked:after {
+            background-color: var(--accent-primary);
+        }
+        /* Modal Styling */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9); /* Very dark backdrop */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 50;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-6">
+
+    <div id="app" class="app-container w-full max-w-3xl mx-auto">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-white my-8 tracking-wider text-center">
+            PHYSIOGNOMY ANALYZER <span style="color: var(--accent-primary);">/ 8X</span>
+        </h1>
+        
+        <!-- Main Content -->
+        <div id="main-content" class="w-full">
+            
+            <!-- Navigation Tabs -->
+            <div class="flex w-full mb-6 p-1 border-b-2 border-[#333]">
+                <button id="tab-analyzer" class="flex-1 py-3 font-semibold text-sm sm:text-base tab-active transition duration-150 uppercase tracking-wider">
+                    1. Analyzer
+                </button>
+                <button id="tab-learn" class="flex-1 py-3 font-semibold text-sm sm:text-base text-gray-500 hover:text-white transition duration-150 uppercase tracking-wider">
+                    2. Learn
+                </button>
+                 <button id="tab-compare" class="flex-1 py-3 font-semibold text-sm sm:text-base text-gray-500 hover:text-white transition duration-150 uppercase tracking-wider">
+                    3. Compare
+                </button>
+            </div>
+
+            <!-- 1. Analyzer View -->
+            <div id="view-analyzer" class="w-full">
+                <h2 class="text-xl font-bold text-white mb-4">Feature Selection (8 Categories)</h2>
+                <!-- Feature Selection Area -->
+                <div id="input-container" class="space-y-4 w-full">
+                    <!-- Dynamically generated feature categories will go here -->
+                </div>
+
+                <button id="analyze-btn" 
+                        style="background-color: var(--accent-primary);"
+                        class="w-full mt-8 py-4 text-gray-900 font-black text-lg rounded-lg shadow-lg hover:brightness-110 transition duration-200 transform hover:scale-[1.01] focus:outline-none focus:ring-4 focus:ring-opacity-50 uppercase tracking-widest">
+                    Run Analysis
+                </button>
+
+                <!-- Results Display Area -->
+                <div id="results-container" class="hidden w-full mt-10 space-y-6">
+                    
+                    <h2 class="text-2xl font-bold text-white">Character Metrics Report</h2>
+                    <p class="text-sm" style="color: var(--text-muted);">Click any metric box for a **Trait Deep Dive** to see contributing factors.</p>
+
+                    <!-- Score Display Grid (10 Traits) -->
+                    <div id="score-grid" class="grid grid-cols-2 sm:grid-cols-5 gap-4">
+                        <!-- Scores will be injected here -->
+                    </div>
+
+                    <!-- Detailed Interpretation -->
+                    <div class="card p-6 border-l-4" style="border-color: var(--accent-primary);">
+                        <h3 class="text-xl font-semibold mb-3 text-white">Interpretive Summary</h3>
+                        <ul id="interpretation-list" class="space-y-2 text-sm" style="color: var(--text-muted);">
+                            <!-- Interpretations will be injected here -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 2. Learning View (Flashcards) -->
+            <div id="view-learn" class="hidden w-full">
+                 <h2 class="text-xl font-bold text-white mb-4">Learning Module (Flashcards)</h2>
+                 <div id="flashcard-container" class="card p-6 min-h-[300px] flex flex-col justify-between border-2 border-gray-700">
+                    <!-- Flashcard content -->
+                    <div class="flex-grow flex flex-col items-center justify-center text-center">
+                        <p class="text-sm font-light mb-2 uppercase" style="color: var(--accent-primary);" id="flashcard-category"></p>
+                        <h3 class="text-3xl font-black text-white mb-6" id="flashcard-feature">Click Start Learning!</h3>
+                        
+                        <div id="flashcard-interpretation-box" class="hidden mt-4 p-4 border-l-4 border-[#4CAF50] bg-[#333] rounded-lg max-w-md transition duration-300">
+                             <p class="text-base text-gray-300" id="flashcard-interpretation"></p>
+                        </div>
+                    </div>
+
+                    <!-- Controls -->
+                    <div class="mt-8 space-y-3">
+                        <button id="reveal-btn" class="w-full py-3 bg-[#4CAF50] text-black font-extrabold rounded-lg shadow-md transition duration-200 hover:bg-[#66BB6A] focus:outline-none uppercase">
+                            Reveal Trait Insight
+                        </button>
+                        <div class="flex space-x-3">
+                             <button id="prev-btn" class="flex-1 py-3 bg-gray-700 text-white font-semibold rounded-lg transition duration-200 hover:bg-gray-600 focus:outline-none uppercase">
+                                &larr; Previous
+                            </button>
+                            <button id="next-btn" style="background-color: var(--accent-primary);" class="flex-1 py-3 text-gray-900 font-extrabold rounded-lg transition duration-200 hover:brightness-110 focus:outline-none uppercase">
+                                Next Feature &rarr;
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+             <!-- 3. Comparison View -->
+            <div id="view-compare" class="hidden w-full">
+                 <h2 class="text-xl font-bold text-white mb-4">Feature Comparison Module</h2>
+                 <p class="text-sm" style="color: var(--text-muted);">Select a category and up to four different features to compare their trait impact scores.</p>
+                 
+                 <!-- Category Dropdown -->
+                 <div class="card p-5 mt-4">
+                     <label for="compare-category-select" class="block text-lg font-medium text-white mb-2">Select Category</label>
+                     <select id="compare-category-select" class="w-full p-3 border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#00BCD4] focus:border-[#00BCD4] bg-gray-700 text-white">
+                         <!-- Categories populated by JS -->
+                     </select>
+                 </div>
+
+                 <!-- Feature Dropdowns (4 Columns) -->
+                 <div id="compare-features-container" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+                     
+                     <!-- Feature A -->
+                     <div class="card p-4 border border-gray-700">
+                         <label for="feature-a-select" class="block text-sm font-medium" style="color: var(--accent-primary);">Feature A</label>
+                         <select id="feature-a-select" class="w-full p-2 border border-gray-600 rounded-lg text-sm focus:ring-2 focus:ring-[#00BCD4] focus:border-[#00BCD4] bg-gray-700 text-white">
+                            <!-- Features A populated by JS -->
+                         </select>
+                     </div>
+                     
+                     <!-- Feature B -->
+                     <div class="card p-4 border border-gray-700">
+                         <label for="feature-b-select" class="block text-sm font-medium" style="color: var(--accent-primary);">Feature B</label>
+                         <select id="feature-b-select" class="w-full p-2 border border-gray-600 rounded-lg text-sm focus:ring-2 focus:ring-[#00BCD4] focus:border-[#00BCD4] bg-gray-700 text-white">
+                             <!-- Features B populated by JS -->
+                         </select>
+                     </div>
+                     
+                      <!-- Feature C -->
+                     <div class="card p-4 border border-gray-700">
+                         <label for="feature-c-select" class="block text-sm font-medium" style="color: var(--accent-primary);">Feature C</label>
+                         <select id="feature-c-select" class="w-full p-2 border border-gray-600 rounded-lg text-sm focus:ring-2 focus:ring-[#00BCD4] focus:border-[#00BCD4] bg-gray-700 text-white">
+                            <!-- Features C populated by JS -->
+                         </select>
+                     </div>
+                     
+                     <!-- Feature D -->
+                     <div class="card p-4 border border-gray-700">
+                         <label for="feature-d-select" class="block text-sm font-medium" style="color: var(--accent-primary);">Feature D</label>
+                         <select id="feature-d-select" class="w-full p-2 border border-gray-600 rounded-lg text-sm focus:ring-2 focus:ring-[#00BCD4] focus:border-[#00BCD4] bg-gray-700 text-white">
+                             <!-- Features D populated by JS -->
+                         </select>
+                     </div>
+                 </div>
+
+                 <!-- Comparison Results -->
+                 <div id="comparison-results" class="card p-6 mt-6 hidden overflow-x-auto border-2 border-gray-700">
+                     <h3 class="text-xl font-semibold mb-4 text-white">Impact Score Grid</h3>
+                     <p id="comparison-error" class="text-red-400 text-sm hidden mb-4">Please select at least two distinct features for comparison.</p>
+
+                     <div id="comparison-grid" class="min-w-full">
+                         <!-- Comparison data injected here -->
+                     </div>
+                 </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal for Trait Deep Dive -->
+    <div id="deep-dive-modal" class="modal-backdrop hidden">
+        <div class="modal-content w-full sm:max-w-xl border-t-4" style="border-color: var(--accent-primary); background-color: var(--card-bg);">
+            <h3 id="modal-title" class="text-2xl font-bold mb-4 text-white"></h3>
+            <p class="text-sm mb-4" style="color: var(--text-muted);">How your selections contributed to this score:</p>
+            <div id="modal-content-list" class="space-y-3 text-sm">
+                <!-- Deep dive details injected here -->
+            </div>
+            <button id="modal-close-btn" class="w-full mt-6 py-3 bg-red-600 text-white font-bold rounded-lg hover:bg-red-500 uppercase">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // --- EMBEDDED DATA START ---
+        // The complete physiognomy_data.json content is embedded here to avoid file loading issues.
+        const PHYSIOGNOMY_DATA = {
+            "allTraits": ["cunning", "spirituality", "jealousy", "leadership", "patience", "practicality", "creativity", "emotional_stability", "sociability", "energy"],
+            "rules": {
+                "Forehead": [
+                    {
+                        "value": "broad_lined",
+                        "label": "Broad & Lined Forehead (Contemplative)",
+                        "traitImpact": { "cunning": 1, "spirituality": 3, "jealousy": -2, "leadership": 2, "patience": 3, "practicality": -1, "creativity": 1, "emotional_stability": 2, "sociability": 0, "energy": -1 },
+                        "interpretation": "Associated with deep contemplation, wisdom, a strong inner life, and excellent long-term strategy. Prefers mental over physical tasks."
+                    },
+                    {
+                        "value": "narrow_receding",
+                        "label": "Narrow or Receding Forehead (Impulsive)",
+                        "traitImpact": { "cunning": 2, "spirituality": -2, "jealousy": 1, "leadership": -1, "patience": -3, "practicality": 1, "creativity": -1, "emotional_stability": -2, "sociability": 1, "energy": 3 },
+                        "interpretation": "Can suggest impulsive action, impatience, and difficulty with long-term planning. Focus is on immediate results and high physical energy."
+                    },
+                    {
+                        "value": "smooth_high",
+                        "label": "Smooth & High Forehead (Idealistic)",
+                        "traitImpact": { "cunning": -1, "spirituality": 1, "jealousy": 0, "leadership": 1, "patience": 1, "practicality": 0, "creativity": 2, "emotional_stability": 1, "sociability": 0, "energy": 0 },
+                        "interpretation": "Signifies clarity of thought, idealism, and a creative vision, often associated with a simple, direct mind and strong foresight."
+                    },
+                    {
+                        "value": "sloping_low",
+                        "label": "Sloping & Low Forehead (Fast Processor)",
+                        "traitImpact": { "cunning": 3, "spirituality": -3, "jealousy": 1, "leadership": 2, "patience": -2, "practicality": 2, "creativity": 0, "emotional_stability": -1, "sociability": 1, "energy": 3 },
+                        "interpretation": "Represents quick reflexes, rapid thinking, and action-oriented intelligence, sometimes at the expense of deep spiritual or patient contemplation."
+                    },
+                    {
+                        "value": "prominent_brow",
+                        "label": "Prominent Brow Ridge (Determination)",
+                        "traitImpact": { "cunning": 1, "spirituality": -1, "jealousy": 2, "leadership": 3, "patience": 2, "practicality": 3, "creativity": -2, "emotional_stability": 2, "sociability": -1, "energy": 1 },
+                        "interpretation": "Indicates strong will, fierce determination, and excellent organizational ability. Focuses heavily on the practical and immediate execution of leadership."
+                    },
+                    {
+                        "value": "arched_gentle",
+                        "label": "Arched & Gentle Forehead (Balanced)",
+                        "traitImpact": { "cunning": 0, "spirituality": 1, "jealousy": 0, "leadership": 1, "patience": 1, "practicality": 1, "creativity": 1, "emotional_stability": 1, "sociability": 1, "energy": 1 },
+                        "interpretation": "A sign of a well-balanced temperament, combining intellect, energy, and emotional harmony. Adaptable and moderate in all traits."
+                    }
+                ],
+                "Eyes": [
+                    {
+                        "value": "small_deep_set",
+                        "label": "Small, Deep-Set Eyes (Cautious)",
+                        "traitImpact": { "cunning": 3, "spirituality": -1, "jealousy": 2, "leadership": 1, "patience": 2, "practicality": 2, "creativity": -2, "emotional_stability": 3, "sociability": -2, "energy": 0 },
+                        "interpretation": "Associated with being calculating, cautious, and secretive, having intense focus on goals. Excellent at observation and long-term caution."
+                    },
+                    {
+                        "value": "large_expressive",
+                        "label": "Large, Expressive Eyes (Openness)",
+                        "traitImpact": { "cunning": -2, "spirituality": 2, "jealousy": -1, "leadership": 1, "patience": -1, "practicality": -2, "creativity": 3, "emotional_stability": -3, "sociability": 3, "energy": 1 },
+                        "interpretation": "Signifies openness, emotional depth, and sincerity. Highly sociable and creative, but can lack emotional stability and focus."
+                    },
+                    {
+                        "value": "shifting_hooded",
+                        "label": "Shifting or Hooded Eyes (Measured)",
+                        "traitImpact": { "cunning": 2, "spirituality": 0, "jealousy": 1, "leadership": 0, "patience": 1, "practicality": 1, "creativity": 0, "emotional_stability": 1, "sociability": 0, "energy": 0 },
+                        "interpretation": "Traditionally linked to cautiousness, suspicion, and measured responses. Prefers observation over participation."
+                    },
+                    {
+                        "value": "wide_set",
+                        "label": "Wide-Set Eyes (Tolerance)",
+                        "traitImpact": { "cunning": 0, "spirituality": 1, "jealousy": -3, "leadership": -1, "patience": 2, "practicality": -1, "creativity": 2, "emotional_stability": 1, "sociability": 2, "energy": 0 },
+                        "interpretation": "Indicates a broad perspective, tolerance, and patience. Sees the 'big picture' but can lack focus or sharp cunning."
+                    },
+                    {
+                        "value": "close_set",
+                        "label": "Close-Set Eyes (Concentration)",
+                        "traitImpact": { "cunning": 2, "spirituality": -1, "jealousy": 3, "leadership": 1, "patience": 3, "practicality": 2, "creativity": -2, "emotional_stability": 2, "sociability": -3, "energy": 1 },
+                        "interpretation": "Signifies intense focus, attention to detail, and concentration. Can lead to intolerance or tunnel vision (high jealousy/low sociability)."
+                    },
+                    {
+                        "value": "upturned_corners",
+                        "label": "Upturned Corners (Optimistic/Ambitious)",
+                        "traitImpact": { "cunning": 1, "spirituality": 0, "jealousy": 1, "leadership": 3, "patience": 0, "practicality": 2, "creativity": 1, "emotional_stability": 1, "sociability": 1, "energy": 2 },
+                        "interpretation": "Associated with high ambition, enthusiasm, and energy. A positive outlook that drives leadership and practical efforts."
+                    }
+                ],
+                "Nose": [
+                    {
+                        "value": "aquiline_hooked",
+                        "label": "Aquiline (Hooked) Nose (Ambitious)",
+                        "traitImpact": { "cunning": 2, "spirituality": -1, "jealousy": 2, "leadership": 3, "patience": 2, "practicality": 3, "creativity": -1, "emotional_stability": 2, "sociability": -1, "energy": 2 },
+                        "interpretation": "Indicates strong ambition, independence, and a fierce, determined drive for success and resources. Very practical and energetic in pursuit of goals."
+                    },
+                    {
+                        "value": "broad_bulbous",
+                        "label": "Broad or Bulbous Nose Tip (Generous)",
+                        "traitImpact": { "cunning": -1, "spirituality": 1, "jealousy": -2, "leadership": -1, "patience": 3, "practicality": 3, "creativity": 0, "emotional_stability": 1, "sociability": 2, "energy": -2 },
+                        "interpretation": "Associated with generosity, warmth, and strong practical instincts. Excellent patience for building slowly and high sociability."
+                    },
+                    {
+                        "value": "straight_long",
+                        "label": "Straight & Long Nose (Dignified)",
+                        "traitImpact": { "cunning": 0, "spirituality": 2, "jealousy": 0, "leadership": 2, "patience": 1, "practicality": 1, "creativity": 1, "emotional_stability": 3, "sociability": 0, "energy": 0 },
+                        "interpretation": "Signifies dignity, sound judgment, stability in career, and a balanced, emotionally stable approach to command."
+                    },
+                    {
+                        "value": "small_upturned",
+                        "label": "Small & Slightly Upturned Nose (Friendly)",
+                        "traitImpact": { "cunning": -2, "spirituality": 1, "jealousy": -1, "leadership": -2, "patience": -1, "practicality": -2, "creativity": 3, "emotional_stability": -1, "sociability": 3, "energy": 2 },
+                        "interpretation": "Represents a lively, cheerful, and creative personality. Highly sociable but may lack seriousness in leadership or long-term practical planning."
+                    },
+                    {
+                        "value": "roman_prominent_bridge",
+                        "label": "Roman Nose with Prominent Bridge (Commanding)",
+                        "traitImpact": { "cunning": 1, "spirituality": 0, "jealousy": 1, "leadership": 3, "patience": 2, "practicality": 3, "creativity": -1, "emotional_stability": 3, "sociability": -1, "energy": 1 },
+                        "interpretation": "A strong sign of leadership, authority, and emotional stability. People with this nose are often driven, commanding, and very practical."
+                    },
+                    {
+                        "value": "fleshy_tip",
+                        "label": "Fleshy Tip (Late Success/Affluence)",
+                        "traitImpact": { "cunning": 1, "spirituality": 1, "jealousy": -1, "leadership": 0, "patience": 3, "practicality": 3, "creativity": 1, "emotional_stability": 2, "sociability": 1, "energy": -1 },
+                        "interpretation": "Associated with wealth, affluence, and the potential for late-life prosperity. Suggests strong patience and grounded practical sense."
+                    }
+                ],
+                "Mouth": [
+                    {
+                        "value": "thin_tight_lips",
+                        "label": "Thin, Tight Lips (Reserved/Firm)",
+                        "traitImpact": { "cunning": 2, "spirituality": 0, "jealousy": 1, "leadership": 1, "patience": 3, "practicality": 1, "creativity": -1, "emotional_stability": 2, "sociability": -2, "energy": -1 },
+                        "interpretation": "Often indicates reserved communication, secrecy, and firmness of purpose. They rarely rush their words and are highly patient and reserved."
+                    },
+                    {
+                        "value": "full_broad_lips",
+                        "label": "Full, Broad Lips (Outspoken/Sensuous)",
+                        "traitImpact": { "cunning": -1, "spirituality": 0, "jealousy": -2, "leadership": 0, "patience": -2, "practicality": -1, "creativity": 2, "emotional_stability": -2, "sociability": 3, "energy": 2 },
+                        "interpretation": "Associated with warmth, sensuousness, and an outspoken, direct nature. Can be impatient, emotionally driven, but very sociable and energetic."
+                    },
+                    {
+                        "value": "downturned_corners",
+                        "label": "Downturned Corners (Critical/Skeptical)",
+                        "traitImpact": { "cunning": 0, "spirituality": -1, "jealousy": 3, "leadership": -1, "patience": 0, "practicality": 0, "creativity": 0, "emotional_stability": -1, "sociability": -1, "energy": 0 },
+                        "interpretation": "Can suggest chronic dissatisfaction, skepticism, or a critical disposition which affects interactions and sociability."
+                    },
+                    {
+                        "value": "upward_corners",
+                        "label": "Upward Corners (Optimistic/Happy)",
+                        "traitImpact": { "cunning": 0, "spirituality": 2, "jealousy": -3, "leadership": 1, "patience": 1, "practicality": 1, "creativity": 2, "emotional_stability": 3, "sociability": 3, "energy": 2 },
+                        "interpretation": "A clear sign of cheerfulness, optimism, and emotional stability. Very sociable, energetic, and generally free of jealousy."
+                    },
+                    {
+                        "value": "cupids_bow",
+                        "label": "Defined Cupid's Bow (Articulate/Sharp)",
+                        "traitImpact": { "cunning": 2, "spirituality": 1, "jealousy": 1, "leadership": 1, "patience": 0, "practicality": 1, "creativity": 3, "emotional_stability": 0, "sociability": 1, "energy": 1 },
+                        "interpretation": "Indicates high articulacy, a keen aesthetic sense, and mental sharpness, often leading to creative expression."
+                    },
+                    {
+                        "value": "wide_mouth",
+                        "label": "Wide Mouth (Generous/Commanding)",
+                        "traitImpact": { "cunning": 0, "spirituality": 1, "jealousy": -2, "leadership": 3, "patience": 2, "practicality": 2, "creativity": 1, "emotional_stability": 2, "sociability": 3, "energy": 1 },
+                        "interpretation": "Associated with generosity of spirit, strong leadership potential, and the ability to rally people. High in sociability and practical ability."
+                    }
+                ],
+                "Chin": [
+                    {
+                        "value": "sharp_pointed",
+                        "label": "Sharp or Pointed Chin (Volatile)",
+                        "traitImpact": { "cunning": 2, "spirituality": -1, "jealousy": 1, "leadership": 0, "patience": -2, "practicality": -1, "creativity": 1, "emotional_stability": -2, "sociability": 1, "energy": 2 },
+                        "interpretation": "Often signifies self-interest, volatility, and a need for external validation. Lacks perseverance but is socially quick and energetic."
+                    },
+                    {
+                        "value": "square_protruding",
+                        "label": "Square & Protruding Chin (Willpower)",
+                        "traitImpact": { "cunning": -1, "spirituality": 0, "jealousy": -2, "leadership": 3, "patience": 3, "practicality": 3, "creativity": 0, "emotional_stability": 3, "sociability": -1, "energy": 2 },
+                        "interpretation": "Represents immense determination, strong willpower, reliability, and emotional stability. A powerful indicator of late-life success and practicality."
+                    },
+                    {
+                        "value": "round_recessed",
+                        "label": "Round and Recessed Chin (Adaptive)",
+                        "traitImpact": { "cunning": 0, "spirituality": 2, "jealousy": 0, "leadership": -2, "patience": -1, "practicality": -2, "creativity": 1, "emotional_stability": -1, "sociability": 2, "energy": -1 },
+                        "interpretation": "Suggests a pleasant, adaptable nature but sometimes a lack of strong defense mechanisms, leading to difficulty in leadership and stability."
+                    },
+                    {
+                        "value": "cleft_chin",
+                        "label": "Cleft Chin (Sociable/Driven)",
+                        "traitImpact": { "cunning": 1, "spirituality": -1, "jealousy": 1, "leadership": 2, "patience": 1, "practicality": 1, "creativity": 0, "emotional_stability": 0, "sociability": 3, "energy": 3 },
+                        "interpretation": "Associated with high charisma, a strong drive for attention, and energetic sociability. Often a sign of late-life leadership potential."
+                    },
+                    {
+                        "value": "double_chin",
+                        "label": "Double Chin (Affluence/Comfort)",
+                        "traitImpact": { "cunning": -1, "spirituality": 2, "jealousy": -2, "leadership": 0, "patience": 3, "practicality": 1, "creativity": 1, "emotional_stability": 3, "sociability": 2, "energy": -3 },
+                        "interpretation": "Suggests a love of comfort, a generous nature, and high emotional stability. Low energy for physical tasks, favoring patient, spiritual pursuits."
+                    },
+                    {
+                        "value": "broad_flat",
+                        "label": "Broad & Flat Chin (Self-Reliant)",
+                        "traitImpact": { "cunning": 1, "spirituality": 0, "jealousy": 0, "leadership": 2, "patience": 3, "practicality": 3, "creativity": -1, "emotional_stability": 3, "sociability": -2, "energy": 0 },
+                        "interpretation": "The epitome of self-reliance, endurance, and practical tenacity. Highly patient and stable, but often introverted or less sociable."
+                    }
+                ],
+                "Ears": [
+                    {
+                        "value": "large_attached_lobe",
+                        "label": "Large Ears with Attached Lobe (Traditional)",
+                        "traitImpact": { "cunning": 1, "spirituality": 2, "jealousy": -1, "leadership": 1, "patience": 2, "practicality": 1, "creativity": 0, "emotional_stability": 1, "sociability": 0, "energy": 0 },
+                        "interpretation": "Indicates deep listening ability, a traditional mind, and an ability to command respect through quiet authority and stability."
+                    },
+                    {
+                        "value": "small_high_set",
+                        "label": "Small, High-Set Ears (Quick Thinker)",
+                        "traitImpact": { "cunning": 2, "spirituality": -1, "jealousy": 1, "leadership": 2, "patience": -2, "practicality": 2, "creativity": 1, "emotional_stability": -1, "sociability": 0, "energy": 3 },
+                        "interpretation": "Associated with quick thinking, high intelligence, and strong energy, but a tendency towards impulsiveness and quick decisions (low patience)."
+                    },
+                    {
+                        "value": "thick_detatched_lobe",
+                        "label": "Thick Ears with Detached Lobe (Wisdom/Fortune)",
+                        "traitImpact": { "cunning": -1, "spirituality": 3, "jealousy": -3, "leadership": 1, "patience": 3, "practicality": 0, "creativity": 2, "emotional_stability": 3, "sociability": 1, "energy": 1 },
+                        "interpretation": "The pinnacle of good fortune and longevity. Represents wisdom, generosity, stability, and incredible patience."
+                    },
+                    {
+                        "value": "ears_close_to_head",
+                        "label": "Ears Close to Head (Conformity)",
+                        "traitImpact": { "cunning": 1, "spirituality": 0, "jealousy": 0, "leadership": 1, "patience": 1, "practicality": 2, "creativity": -2, "emotional_stability": 2, "sociability": -1, "energy": 0 },
+                        "interpretation": "Suggests a preference for tradition and conformity. Reliable, practical, and emotionally stable, but may lack creative independence."
+                    },
+                    {
+                        "value": "ears_sticking_out",
+                        "label": "Ears Sticking Out (Rebellious/Creative)",
+                        "traitImpact": { "cunning": -1, "spirituality": 1, "jealousy": -1, "leadership": -1, "patience": 0, "practicality": -2, "creativity": 3, "emotional_stability": -1, "sociability": 2, "energy": 2 },
+                        "interpretation": "Often indicates a rebellious, independent, and unconventional personality. High in energy and creativity, but less concerned with practical rules or patience."
+                    },
+                    {
+                        "value": "low_set_ears",
+                        "label": "Low-Set Ears (Skepticism/Slow to trust)",
+                        "traitImpact": { "cunning": 3, "spirituality": -2, "jealousy": 2, "leadership": 0, "patience": 2, "practicality": 1, "creativity": 0, "emotional_stability": 1, "sociability": -2, "energy": -1 },
+                        "interpretation": "Linked to a critical, skeptical nature and cautious listening. High cunning and patience for details, but very low sociability."
+                    }
+                ],
+                "Cheeks": [
+                    {
+                        "value": "full_fleshy",
+                        "label": "Full/Fleshy Cheeks (Prosperity/Sociability)",
+                        "traitImpact": { "cunning": -1, "spirituality": 1, "jealousy": -2, "leadership": 0, "patience": 2, "practicality": 2, "creativity": 1, "emotional_stability": 2, "sociability": 3, "energy": -2 },
+                        "interpretation": "Associated with affluence, generosity, and a love of comfort. Highly sociable and emotionally stable, but may lack high energy for physical exertion."
+                    },
+                    {
+                        "value": "high_prominent_bones",
+                        "label": "High, Prominent Cheekbones (Drive/Leadership)",
+                        "traitImpact": { "cunning": 1, "spirituality": 0, "jealousy": 1, "leadership": 3, "patience": 1, "practicality": 2, "creativity": 0, "emotional_stability": 2, "sociability": 1, "energy": 3 },
+                        "interpretation": "Signifies strong drive, authority, and high leadership potential. Individuals are often energetic, practical, and emotionally resilient."
+                    },
+                    {
+                        "value": "hollow_sunken",
+                        "label": "Hollow or Sunken Cheeks (Intensity/Dedication)",
+                        "traitImpact": { "cunning": 2, "spirituality": -1, "jealousy": 2, "leadership": 1, "patience": 3, "practicality": 1, "creativity": -1, "emotional_stability": 1, "sociability": -3, "energy": 2 },
+                        "interpretation": "Suggests intensity, focused dedication, and perseverance (high patience). Can be reserved, leading to low sociability and potential jealousy."
+                    },
+                    {
+                        "value": "rosy_bright",
+                        "label": "Rosy/Bright Cheeks (Health/Optimism)",
+                        "traitImpact": { "cunning": -1, "spirituality": 1, "jealousy": -2, "leadership": 1, "patience": -1, "practicality": 0, "creativity": 2, "emotional_stability": 1, "sociability": 3, "energy": 3 },
+                        "interpretation": "Represents vitality, optimism, and a cheerful disposition. Highly sociable and energetic, thriving on interaction."
+                    },
+                    {
+                        "value": "with_dimples",
+                        "label": "Cheeks with Dimples (Friendliness/Charm)",
+                        "traitImpact": { "cunning": 0, "spirituality": 0, "jealousy": -3, "leadership": 0, "patience": 0, "practicality": 0, "creativity": 1, "emotional_stability": 1, "sociability": 3, "energy": 1 },
+                        "interpretation": "A sign of charm, friendliness, and an approachable nature. Extremely low jealousy and high sociability."
+                    },
+                    {
+                        "value": "flat_wide",
+                        "label": "Flat & Wide Cheeks (Reserved/Practical)",
+                        "traitImpact": { "cunning": 1, "spirituality": 0, "jealousy": 0, "leadership": 0, "patience": 2, "practicality": 3, "creativity": -1, "emotional_stability": 2, "sociability": -2, "energy": 0 },
+                        "interpretation": "Indicates a reserved, practical, and grounded individual. High emotional stability and practicality, preferring a quiet life."
+                    }
+                ],
+                "Jaw": [
+                    {
+                        "value": "square_broad",
+                        "label": "Square, Broad Jaw (Determination/Stability)",
+                        "traitImpact": { "cunning": 0, "spirituality": -1, "jealousy": 1, "leadership": 3, "patience": 3, "practicality": 3, "creativity": -2, "emotional_stability": 3, "sociability": -2, "energy": 2 },
+                        "interpretation": "The classic sign of immense willpower, endurance, and stability. Highly reliable leader, practical, and emotionally stable, but often less sociable."
+                    },
+                    {
+                        "value": "pointed_narrow",
+                        "label": "Pointed, Narrow Jaw (Sensitivity/Artistic)",
+                        "traitImpact": { "cunning": 1, "spirituality": 1, "jealousy": 0, "leadership": -2, "patience": -1, "practicality": -2, "creativity": 3, "emotional_stability": -2, "sociability": 2, "energy": 1 },
+                        "interpretation": "Associated with high artistic sensitivity and creativity. Can be emotionally volatile or lack the force required for strong leadership and practical execution."
+                    },
+                    {
+                        "value": "receding_jaw",
+                        "label": "Receding Jaw (Adaptability/Lack of Force)",
+                        "traitImpact": { "cunning": 0, "spirituality": 2, "jealousy": -1, "leadership": -3, "patience": 0, "practicality": -3, "creativity": 1, "emotional_stability": -1, "sociability": 3, "energy": -1 },
+                        "interpretation": "Suggests adaptability and a non-confrontational nature. Highly sociable but lacks the determination for forceful leadership or practical commitment."
+                    },
+                    {
+                        "value": "heavy_strong_jawline",
+                        "label": "Heavy, Strong Jawline (Authority/Endurance)",
+                        "traitImpact": { "cunning": 1, "spirituality": 0, "jealousy": 2, "leadership": 3, "patience": 3, "practicality": 2, "creativity": -1, "emotional_stability": 3, "sociability": -1, "energy": 2 },
+                        "interpretation": "Similar to the square jaw, signifies incredible authority, physical and mental endurance, and great patience for long-term projects."
+                    },
+                    {
+                        "value": "soft_rounded",
+                        "label": "Soft, Rounded Jaw (Gentleness/Affection)",
+                        "traitImpact": { "cunning": -1, "spirituality": 1, "jealousy": -2, "leadership": -1, "patience": 2, "practicality": 0, "creativity": 1, "emotional_stability": 1, "sociability": 3, "energy": -2 },
+                        "interpretation": "Linked to a gentle, affectionate, and accommodating nature. High sociability and patience, but lower energy and leadership ambition."
+                    },
+                    {
+                        "value": "prominent_angles",
+                        "label": "Prominent Jaw Angles (Aggression/Forcefulness)",
+                        "traitImpact": { "cunning": 3, "spirituality": -2, "jealousy": 3, "leadership": 2, "patience": -2, "practicality": 1, "creativity": 0, "emotional_stability": -1, "sociability": -3, "energy": 3 },
+                        "interpretation": "Indicates a highly forceful and dynamic personality, often linked to aggression and immediate action (low patience). High cunning and jealousy, low sociability."
+                    }
+                ]
+            }
+        };
+        // --- EMBEDDED DATA END ---
+
+
+        let physiognomyRules = PHYSIOGNOMY_DATA.rules; 
+        let allTraits = PHYSIOGNOMY_DATA.allTraits;
+        let maxScores = {}; 
+        let categories = Object.keys(physiognomyRules);
+        let lastAnalysisData = null;
+        let featureList = []; 
+
+        // --- Utility Functions ---
+
+        // Function to calculate maximum possible scores for normalization
+        function calculateMaxScores() {
+            maxScores = allTraits.reduce((acc, trait) => ({ ...acc, [trait]: 0 }), {});
+            categories.forEach(category => {
+                // Find the maximum positive score achievable from *any* single feature in this category
+                allTraits.forEach(trait => {
+                    let maxPositiveImpact = 0;
+                    physiognomyRules[category].forEach(feature => {
+                        maxPositiveImpact = Math.max(maxPositiveImpact, feature.traitImpact[trait]);
+                    });
+                    maxScores[trait] += maxPositiveImpact;
+                });
+            });
+        }
+        
+        // --- Core Application Initialization and Logic ---
+
+        function initializeApp() {
+            calculateMaxScores(); // Must run once to set up max scores
+            
+            const tabAnalyzer = document.getElementById('tab-analyzer');
+            const tabLearn = document.getElementById('tab-learn');
+            const tabCompare = document.getElementById('tab-compare');
+            const viewAnalyzer = document.getElementById('view-analyzer');
+            const viewLearn = document.getElementById('view-learn');
+            const viewCompare = document.getElementById('view-compare');
+
+            const analyzeBtn = document.getElementById('analyze-btn');
+            const modalCloseBtn = document.getElementById('modal-close-btn');
+            
+            // Comparison Selectors (New)
+            const featureASelect = document.getElementById('feature-a-select');
+            const featureBSelect = document.getElementById('feature-b-select');
+            const featureCSelect = document.getElementById('feature-c-select');
+            const featureDSelect = document.getElementById('feature-d-select');
+            
+            const allComparisonSelectors = [featureASelect, featureBSelect, featureCSelect, featureDSelect];
+
+            // --- 1. Navigation Setup ---
+            function switchView(viewId) {
+                viewAnalyzer.classList.add('hidden');
+                viewLearn.classList.add('hidden');
+                viewCompare.classList.add('hidden');
+                
+                [tabAnalyzer, tabLearn, tabCompare].forEach(tab => {
+                    tab.classList.remove('tab-active');
+                    tab.classList.add('text-gray-500');
+                    tab.style.backgroundColor = 'transparent';
+                    tab.style.borderRadius = '0';
+                });
+
+                let activeTab;
+                let activeView;
+
+                if (viewId === 'analyzer') {
+                    activeTab = tabAnalyzer; activeView = viewAnalyzer;
+                } else if (viewId === 'learn') {
+                    activeTab = tabLearn; activeView = viewLearn;
+                    if (featureList.length > 0) updateFlashcard(0); // Reset flashcard view
+                } else if (viewId === 'compare') {
+                    activeTab = tabCompare; activeView = viewCompare;
+                    const categorySelect = document.getElementById('compare-category-select');
+                    if(categorySelect.options.length === 0) {
+                        populateComparisonCategories();
+                    }
+                    populateComparisonFeatures(); 
+                    runComparison(); 
+                }
+                
+                activeView.classList.remove('hidden');
+                activeTab.classList.add('tab-active');
+                activeTab.classList.remove('text-gray-500');
+            }
+            
+            tabAnalyzer.addEventListener('click', () => switchView('analyzer'));
+            tabLearn.addEventListener('click', () => switchView('learn'));
+            tabCompare.addEventListener('click', () => switchView('compare'));
+
+            // --- 2. Analyzer Input Rendering & Persistence ---
+            function renderInputFields() {
+                const inputContainer = document.getElementById('input-container');
+                inputContainer.innerHTML = ''; 
+                // Using an identifier specific to the number of rules to prevent old saves from breaking the new 8-feature structure
+                const saveKey = 'analyzerSelections_v5'; 
+                const savedSelections = JSON.parse(localStorage.getItem(saveKey) || '{}');
+                featureList = [];
+
+                for (const category in physiognomyRules) {
+                    const features = physiognomyRules[category];
+                    const categoryId = category.toLowerCase();
+                    
+                    const cardHtml = `
+                        <div class="card p-5 border border-gray-700">
+                            <h2 class="text-xl font-black mb-3" style="color: var(--accent-primary);">${category}</h2>
+                            <div class="space-y-2">
+                                ${features.map((feature, index) => {
+                                    // Check if this feature was the last selected, or default to the first option if no save exists
+                                    const isChecked = savedSelections[categoryId] === feature.value || 
+                                                      (Object.keys(savedSelections).length === 0 && index === 0);
+                                    return `
+                                    <label for="${feature.value}" class="flex items-center p-3 border border-gray-700 rounded-md cursor-pointer transition duration-150 ease-in-out hover:bg-gray-700">
+                                        <input 
+                                            type="radio" 
+                                            id="${feature.value}" 
+                                            name="${categoryId}" 
+                                            value="${feature.value}" 
+                                            class="form-radio h-5 w-5 border-gray-500 transition duration-150 ease-in-out" 
+                                            style="color: var(--accent-primary);"
+                                            ${isChecked ? 'checked' : ''}
+                                        >
+                                        <span class="ml-3 text-sm font-medium text-gray-300">${feature.label}</span>
+                                    </label>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+                    `;
+                    inputContainer.innerHTML += cardHtml;
+                    features.forEach(f => featureList.push({ category: category, ...f }));
+                }
+            }
+            
+            // --- 3. Analysis Core Logic ---
+            
+            const traitColors = {
+                cunning: '#FFCC80', spirituality: '#81C784', jealousy: '#E57373', 
+                leadership: '#4DD0E1', patience: '#BCAAA4', practicality: '#C5A0D4',
+                creativity: '#FFB74D', emotional_stability: '#7986CB', sociability: '#F06292', 
+                energy: '#FFF176'
+            };
+            
+            function calculatePercentage(score, max, trait) {
+                // Find the absolute minimum possible score for this trait across all features
+                let minPossibleScore = 0;
+                categories.forEach(category => {
+                    let minCategoryImpact = Infinity;
+                    physiognomyRules[category].forEach(feature => {
+                        minCategoryImpact = Math.min(minCategoryImpact, feature.traitImpact[trait]);
+                    });
+                    minPossibleScore += minCategoryImpact;
+                });
+
+                const range = max - minPossibleScore;
+                let percentage;
+                
+                if (range === 0) {
+                    percentage = 50; // Should only happen if all impacts are 0
+                } else {
+                    // Normalize the score (current - min) over the total possible range
+                    percentage = ((score - minPossibleScore) / range) * 100;
+                    percentage = Math.max(0, Math.min(100, percentage));
+                }
+                return Math.round(percentage);
+            }
+
+            function analyzeProfile() {
+                const currentScores = allTraits.reduce((acc, trait) => ({ ...acc, [trait]: 0 }), {});
+                const interpretations = [];
+                const selectedFeaturesData = [];
+                const currentSelections = {};
+                let allSelected = true;
+                const saveKey = 'analyzerSelections_v5';
+
+                categories.forEach(category => {
+                    const categoryId = category.toLowerCase();
+                    const selectedInput = document.querySelector(`input[name="${categoryId}"]:checked`);
+                    
+                    if (selectedInput) {
+                        const featureValue = selectedInput.value;
+                        const rule = physiognomyRules[category].find(f => f.value === featureValue);
+                        
+                        if (rule) {
+                            allTraits.forEach(trait => {
+                                currentScores[trait] += rule.traitImpact[trait];
+                            });
+                            interpretations.push({ 
+                                category: category, label: rule.label, interpretation: rule.interpretation 
+                            });
+                            selectedFeaturesData.push(rule);
+                            currentSelections[categoryId] = featureValue;
+                        }
+                    } else {
+                        allSelected = false; 
+                    }
+                });
+
+                if (!allSelected) {
+                    renderResultsError("ERROR: Please select a feature for ALL 8 categories before running the analysis.");
+                    return;
+                }
+
+                localStorage.setItem(saveKey, JSON.stringify(currentSelections));
+
+                const finalPercentages = {};
+                allTraits.forEach(trait => {
+                    finalPercentages[trait] = calculatePercentage(currentScores[trait], maxScores[trait], trait);
+                });
+                
+                lastAnalysisData = { percentages: finalPercentages, scores: currentScores, features: selectedFeaturesData };
+                renderResults(finalPercentages, interpretations);
+            }
+            
+            function capitalizeTraitName(key) {
+                return key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+            }
+
+            function renderResults(percentages, interpretations) {
+                const scoreGrid = document.getElementById('score-grid');
+                const interpretationList = document.getElementById('interpretation-list');
+                const resultsContainer = document.getElementById('results-container');
+                scoreGrid.innerHTML = '';
+                interpretationList.innerHTML = '';
+                
+                allTraits.forEach(traitKey => {
+                    const name = capitalizeTraitName(traitKey);
+                    const percent = percentages[traitKey];
+                    const color = traitColors[traitKey];
+                    const scoreHtml = `
+                        <div class="score-box p-3 flex flex-col items-center justify-center text-center" data-trait="${traitKey}" data-trait-name="${name}">
+                            <span class="text-[10px] sm:text-xs font-medium uppercase text-gray-400">${name}</span>
+                            <span class="text-xl sm:text-2xl font-black mt-1 tracking-wider" style="color: ${color};">${percent}%</span>
+                        </div>
+                    `;
+                    scoreGrid.innerHTML += scoreHtml;
+                });
+                
+                interpretations.forEach(item => {
+                    interpretationList.innerHTML += `
+                        <li class="p-3 border-b border-gray-700 last:border-b-0">
+                            <strong class="font-bold text-white">${item.category}: ${item.label}</strong>
+                            <p class="mt-1 text-gray-400">${item.interpretation}</p>
+                        </li>
+                    `;
+                });
+
+                document.querySelectorAll('.score-box').forEach(box => {
+                    box.addEventListener('click', handleDeepDive);
+                });
+
+                resultsContainer.classList.remove('hidden');
+                resultsContainer.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            function renderResultsError(message) {
+                 document.getElementById('score-grid').innerHTML = '';
+                 document.getElementById('interpretation-list').innerHTML = `<li class="p-4 bg-red-800 text-red-300 font-semibold rounded-lg border-l-4 border-red-500">${message}</li>`;
+                 document.getElementById('results-container').classList.remove('hidden');
+                 document.getElementById('results-container').scrollIntoView({ behavior: 'smooth' });
+            }
+
+            analyzeBtn.addEventListener('click', analyzeProfile);
+            
+            // --- 4. Trait Deep Dive Modal Logic ---
+
+            function handleDeepDive(event) {
+                const deepDiveModal = document.getElementById('deep-dive-modal');
+                const modalTitle = document.getElementById('modal-title');
+                const modalContentList = document.getElementById('modal-content-list');
+                
+                if (!lastAnalysisData) return;
+
+                const traitKey = event.currentTarget.dataset.trait;
+                const traitName = event.currentTarget.dataset.traitName;
+                const features = lastAnalysisData.features;
+
+                modalTitle.textContent = `${traitName} Deep Dive: ${lastAnalysisData.percentages[traitKey]}%`;
+                modalContentList.innerHTML = '';
+
+                features.forEach(feature => {
+                    const impact = feature.traitImpact[traitKey];
+                    let impactText = '';
+                    let impactColor = 'text-gray-400';
+                    let impactBg = 'bg-gray-700';
+
+                    if (impact > 0) {
+                        impactText = `+${impact} (STRONG BOOST)`;
+                        impactColor = 'text-green-400 font-bold';
+                        impactBg = 'bg-green-900/50';
+                    } else if (impact < 0) {
+                        impactText = `${impact} (DOWNSIDE)`;
+                        impactColor = 'text-red-400 font-bold';
+                        impactBg = 'bg-red-900/50';
+                    } else {
+                        impactText = '0 (NEUTRAL)';
+                    }
+
+                    modalContentList.innerHTML += `
+                        <div class="p-3 rounded-lg ${impactBg} border-l-2 border-gray-500">
+                            <strong style="color: var(--accent-primary);">${feature.category}: ${feature.label}</strong>
+                            <span class="${impactColor} float-right text-sm tracking-wider">${impactText}</span>
+                            <p class="text-xs text-gray-500 mt-1">${feature.interpretation}</p>
+                        </div>
+                    `;
+                });
+
+                deepDiveModal.classList.remove('hidden');
+            }
+
+            modalCloseBtn.addEventListener('click', () => {
+                document.getElementById('deep-dive-modal').classList.add('hidden');
+            });
+            
+            // --- 5. Flashcard Logic ---
+            const flashcardCategory = document.getElementById('flashcard-category');
+            const flashcardFeature = document.getElementById('flashcard-feature');
+            const flashcardInterpretation = document.getElementById('flashcard-interpretation');
+            const flashcardInterpretationBox = document.getElementById('flashcard-interpretation-box');
+            const revealBtn = document.getElementById('reveal-btn');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            let currentFlashcardIndex = 0;
+
+            function updateFlashcard(index) {
+                if (featureList.length === 0) {
+                    flashcardFeature.textContent = "No features loaded.";
+                    return;
+                }
+
+                const feature = featureList[index];
+                flashcardCategory.textContent = feature.category;
+                flashcardFeature.textContent = feature.label;
+                flashcardInterpretation.textContent = feature.interpretation;
+                flashcardInterpretationBox.classList.add('hidden'); 
+                revealBtn.textContent = 'Reveal Trait Insight';
+                
+                prevBtn.disabled = index === 0;
+                nextBtn.disabled = index === featureList.length - 1;
+                prevBtn.classList.toggle('opacity-50', prevBtn.disabled);
+                nextBtn.classList.toggle('opacity-50', nextBtn.disabled);
+                
+                flashcardCategory.textContent = `${feature.category} (${index + 1} / ${featureList.length})`;
+            }
+
+            function toggleInterpretation() {
+                const isHidden = flashcardInterpretationBox.classList.toggle('hidden');
+                revealBtn.textContent = isHidden ? 'Reveal Trait Insight' : 'Hide Trait Insight';
+            }
+
+            function nextFlashcard() {
+                if (currentFlashcardIndex < featureList.length - 1) {
+                    currentFlashcardIndex++;
+                    updateFlashcard(currentFlashcardIndex);
+                }
+            }
+
+            function prevFlashcard() {
+                if (currentFlashcardIndex > 0) {
+                    currentFlashcardIndex--;
+                    updateFlashcard(currentFlashcardIndex);
+                }
+            }
+            
+            revealBtn.addEventListener('click', toggleInterpretation);
+            nextBtn.addEventListener('click', nextFlashcard);
+            prevBtn.addEventListener('click', prevFlashcard);
+            
+            // --- 6. Comparison Logic ---
+            const compareCategorySelect = document.getElementById('compare-category-select');
+            const comparisonResults = document.getElementById('comparison-results');
+            const comparisonGrid = document.getElementById('comparison-grid');
+            const comparisonError = document.getElementById('comparison-error');
+            
+            // Trait list for comparison headers
+            const comparisonSelectors = [
+                { select: featureASelect, name: 'A' },
+                { select: featureBSelect, name: 'B' },
+                { select: featureCSelect, name: 'C' },
+                { select: featureDSelect, name: 'D' }
+            ];
+
+            function populateComparisonCategories() {
+                compareCategorySelect.innerHTML = '';
+                categories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category;
+                    option.textContent = category;
+                    compareCategorySelect.appendChild(option);
+                });
+                // Add event listeners once
+                compareCategorySelect.addEventListener('change', () => {
+                    populateComparisonFeatures();
+                    runComparison();
+                });
+            }
+
+            function populateComparisonFeatures() {
+                const selectedCategory = compareCategorySelect.value;
+                const features = physiognomyRules[selectedCategory] || [];
+                
+                // Add default "Select..." option for C and D
+                const defaultOption = '<option value="">--- Select Feature ---</option>';
+
+                allComparisonSelectors.forEach((select, index) => {
+                    select.innerHTML = '';
+                    select.innerHTML += defaultOption;
+
+                    features.forEach(feature => {
+                        const option = document.createElement('option');
+                        option.value = feature.value;
+                        option.textContent = feature.label;
+                        select.appendChild(option);
+                    });
+                    
+                    // Pre-select different features for A and B, leave C and D blank
+                    if (features.length > 0 && index === 0) { // Feature A
+                         select.selectedIndex = 1; 
+                    } else if (features.length > 1 && index === 1) { // Feature B
+                         select.selectedIndex = 2; 
+                    } else if (features.length > 2 && index === 2) { // Feature C
+                         select.selectedIndex = 3; 
+                    } else if (features.length > 3 && index === 3) { // Feature D
+                         select.selectedIndex = 4; 
+                    } else { // Handle categories with < 4 features 
+                         select.selectedIndex = 0;
+                    }
+                });
+                
+                // Add change listeners to all selectors
+                allComparisonSelectors.forEach(select => {
+                    select.removeEventListener('change', runComparison);
+                    select.addEventListener('change', runComparison);
+                });
+            }
+            
+            function getFeatureObject(category, featureValue) {
+                if (!featureValue) return null;
+                return physiognomyRules[category].find(f => f.value === featureValue) || null;
+            }
+
+            function runComparison() {
+                const selectedCategory = compareCategorySelect.value;
+                
+                // 1. Get all selected features and filter out nulls/duplicates
+                
+                // Store the objects in the order they were selected (A, B, C, D)
+                const uniqueSelectedFeatures = [];
+                const addedValues = new Set();
+
+                comparisonSelectors.forEach(item => {
+                    const value = item.select.value;
+                    if (value && !addedValues.has(value)) {
+                        const featureObj = getFeatureObject(selectedCategory, value);
+                        if (featureObj) {
+                            uniqueSelectedFeatures.push(featureObj);
+                            addedValues.add(value);
+                        }
+                    }
+                });
+                
+                if (uniqueSelectedFeatures.length < 2) {
+                    comparisonResults.classList.remove('hidden');
+                    comparisonGrid.innerHTML = '';
+                    comparisonError.classList.remove('hidden');
+                    return;
+                }
+
+                comparisonError.classList.add('hidden');
+                comparisonResults.classList.remove('hidden');
+                comparisonGrid.innerHTML = '';
+                
+                const featureCount = uniqueSelectedFeatures.length;
+                
+                // Dynamically set grid columns based on the number of unique selections (+1 for the Trait column)
+                // Use style property for dynamic grid columns since Tailwind classes like grid-cols-5 are not available by default
+                const gridStyle = `grid-template-columns: 1.5fr repeat(${featureCount}, 1fr);`;
+
+                // 2. Build Header Row
+                let headerHTML = `<div class="grid text-xs sm:text-sm font-semibold p-2 border-b-2" style="background-color: var(--card-bg); border-color: var(--accent-primary); ${gridStyle}">`;
+                headerHTML += '<div class="col-span-1 uppercase tracking-wider text-white">Trait Metric</div>';
+                
+                // Dynamically create column headers based on selected features
+                uniqueSelectedFeatures.forEach(feature => {
+                    // Use only first 2 words of the label for compactness
+                    const shortLabel = feature.label.split('(')[0].trim();
+                    headerHTML += `<div class="text-center text-[10px] sm:text-xs truncate font-bold" title="${feature.label}" style="color: var(--accent-primary);">${shortLabel}</div>`;
+                });
+                headerHTML += '</div>';
+                comparisonGrid.innerHTML += headerHTML;
+                
+                // 3. Build Trait Rows
+                allTraits.forEach(trait => {
+                    let rowHTML = `<div class="grid text-xs sm:text-sm p-3 border-b border-gray-700 last:border-b-0 items-center hover:bg-gray-800 transition duration-100" style="${gridStyle}">`;
+                    rowHTML += `<div class="col-span-1 font-medium text-white">${capitalizeTraitName(trait)}</div>`;
+                    
+                    uniqueSelectedFeatures.forEach(feature => {
+                        const impact = feature.traitImpact[trait];
+                        const color = impact > 0 ? 'text-green-400' : (impact < 0 ? 'text-red-400' : 'text-gray-500');
+                        rowHTML += `<div class="text-center ${color} font-black">${impact > 0 ? '+' : ''}${impact}</div>`;
+                    });
+                    rowHTML += '</div>';
+                    comparisonGrid.innerHTML += rowHTML;
+                });
+                
+                // 4. Detailed Interpretations (at the bottom)
+                let interpretationHTML = `
+                    <h4 class="text-lg font-black mt-6 pt-6 border-t border-gray-700 uppercase" style="color: var(--accent-primary);">Feature Interpretations</h4>
+                    <div class="space-y-4 pt-4">
+                `;
+                uniqueSelectedFeatures.forEach((feature) => {
+                    interpretationHTML += `
+                        <div class="p-4 bg-gray-700 rounded-lg border-l-4" style="border-color: var(--accent-primary);">
+                            <strong class="text-white">${feature.category}: ${feature.label}</strong>
+                            <p class="text-sm text-gray-400 mt-1">${feature.interpretation}</p>
+                        </div>
+                    `;
+                });
+                interpretationHTML += '</div>';
+                comparisonGrid.innerHTML += interpretationHTML;
+            }
+
+
+            // Run initial setup
+            renderInputFields();
+            switchView('analyzer'); 
+        }
+
+        // Initialize the application after the DOM content is fully loaded
+        document.addEventListener('DOMContentLoaded', initializeApp);
+    </script>
+</body>
+</html>
