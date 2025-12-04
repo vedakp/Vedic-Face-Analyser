@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trait Analysis Viewer - Sport Edition</title>
-    <!-- Load Tailwind CSS -->
+    <title>Trait Analysis Viewer - Face Reading Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Custom Font - Using Inter, but defining a fallback for "sporty" feel */
-        @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght=500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500;700&display=swap');
         
         /* Custom scrollbar styling for aesthetics */
         .custom-scrollbar::-webkit-scrollbar {
@@ -92,22 +91,19 @@
                 </p>
             </div>
             
-            <!-- Generate Report Button -->
             <button id="generate-report-button" class="mt-4 sm:mt-0 px-6 py-3 bg-red-600 text-white font-bold rounded-lg shadow-xl uppercase transition-all duration-300 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                Generate Report (<span id="selected-count">0</span>/<span id="total-count">3</span>)
+                Generate Report (<span id="selected-count">0</span>/<span id="total-count">24</span>)
             </button>
         </header>
 
         <main id="app-container" class="flex flex-col lg:flex-row gap-8 show-list">
             
-            <!-- Trait Category List Panel (Compact) -->
             <div id="list-panel" class="lg:w-1/3 w-full">
                 <div class="bg-white p-4 rounded-xl paper-panel h-full lg:max-h-[75vh] overflow-y-auto custom-scrollbar">
                     <h2 class="text-xl font-bold mb-3 text-gray-800 border-b-2 border-gray-200 pb-2 uppercase tracking-wider">
                         Categories
                     </h2>
 
-                    <!-- Search Input -->
                     <div class="mb-4">
                         <input type="text" id="trait-search" placeholder="Search categories..." 
                                class="w-full p-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-red-500 transition-colors text-sm text-gray-800"
@@ -115,15 +111,12 @@
                     </div>
 
                     <ul id="trait-list" class="space-y-2">
-                        <!-- List items will be injected here -->
-                    </ul>
+                        </ul>
                 </div>
             </div>
 
-            <!-- Trait Details Panel -->
             <div id="details-panel" class="lg:w-2/3 w-full">
                 <div id="trait-details-container" class="bg-white p-6 rounded-xl paper-panel lg:min-h-[75vh] flex flex-col">
-                    <!-- Navigation (Mobile Only) -->
                     <div class="flex justify-between lg:hidden mb-4">
                         <button id="back-button" class="flex items-center p-2 text-white font-bold bg-gray-800 rounded-lg shadow-lg hover:bg-gray-700 transition-colors uppercase text-sm">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
@@ -141,7 +134,6 @@
                 </div>
             </div>
 
-            <!-- Personalized Report Panel (Hidden by default) -->
             <div id="report-panel" class="lg:w-2/3 w-full hidden">
                 <div class="bg-white p-6 rounded-xl paper-panel lg:min-h-[75vh] flex flex-col">
                     <h2 class="text-3xl font-bold text-red-600 mb-4 uppercase border-b-4 border-red-500 pb-2">
@@ -149,8 +141,7 @@
                     </h2>
                     <div id="report-content" class="space-y-6">
                         <p class="text-gray-500">Your personalized analysis will appear here once all traits are selected.</p>
-                        <!-- Report content will be injected here -->
-                    </div>
+                        </div>
                     
                     <button onclick="changeView('details')" class="lg:hidden mt-6 px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors">
                         Return to Selection
@@ -162,7 +153,7 @@
     </div>
 
     <script>
-        // --- EMBEDDED TRAIT DATA ---
+        // --- EMBEDDED TRAIT DATA (REFRACTORED - IMAGES REMOVED) ---
         const TRAIT_DATA = [
    {
       "name":"Nostril Shape (Financial Perspective)",
@@ -171,23 +162,19 @@
       "features":[
          {
             "name":"Large/Flared Nostrils (Generous Spender)",
-            "trait":"Indicates a generous, open nature, often comfortable with taking financial risks and spending freely on self or others. High potential for earning but also for spending.",
-            "image":"https://placehold.co/300x300/ff7f50/ffffff?text=Flared+Nostrils"
+            "trait":"Indicates a generous, open nature, often comfortable with taking financial risks and spending freely on self or others. High potential for earning but also for spending."
          },
          {
             "name":"Small/Hidden Nostrils (Careful Saver)",
-            "trait":"Associated with cautious financial management, a tendency to be a meticulous saver, and a practical approach to spending. They often build wealth steadily.",
-            "image":"https://placehold.co/300x300/4682b4/ffffff?text=Hidden+Nostrils"
+            "trait":"Associated with cautious financial management, a tendency to be a meticulous saver, and a practical approach to spending. They often build wealth steadily."
          },
          {
             "name":"Round/Symmetrical Nostrils (Balanced Finance)",
-            "trait":"Suggests a balanced approach to money, capable of both saving and sensible spending. Values stability and avoids unnecessary financial drama.",
-            "image":"https://placehold.co/300x300/3cb371/ffffff?text=Round+Nostrils"
+            "trait":"Suggests a balanced approach to money, capable of both saving and sensible spending. Values stability and avoids unnecessary financial drama."
          },
          {
             "name":"Asymmetrical Nostrils (Unpredictable Finance)",
-            "trait":"Indicates a fluctuating or somewhat chaotic financial life. They may experience periods of great wealth followed by instability; requires self-discipline.",
-            "image":"https://placehold.co/300x300/ff0000/ffffff?text=Asym+Nostrils"
+            "trait":"Indicates a fluctuating or somewhat chaotic financial life. They may experience periods of great wealth followed by instability; requires self-discipline."
          }
       ]
    },
@@ -198,28 +185,23 @@
       "features":[
          {
             "name":"Almond Shaped (Exotic/Clever)",
-            "trait":"Indicates a person who is clever, slightly secretive, and highly observant. They are emotionally controlled and often have a magnetic, mysterious appeal.",
-            "image":"https://placehold.co/300x300/9333ea/ffffff?text=Almond+Eyes"
+            "trait":"Indicates a person who is clever, slightly secretive, and highly observant. They are emotionally controlled and often have a magnetic, mysterious appeal."
          },
          {
             "name":"Round/Large Eyes (Innocent/Open)",
-            "trait":"Suggests a person who is emotional, expressive, and wears their heart on their sleeve. They are often perceived as innocent, approachable, and romantic.",
-            "image":"https://placehold.co/300x300/ec4899/ffffff?text=Round+Eyes"
+            "trait":"Suggests a person who is emotional, expressive, and wears their heart on their sleeve. They are often perceived as innocent, approachable, and romantic."
          },
          {
             "name":"Narrow/Hooded Eyes (Analytical)",
-            "trait":"Associated with a sharp, analytical mind. This person observes details others miss and may be guarded with their true feelings until trust is established.",
-            "image":"https://placehold.co/300x300/6366f1/ffffff?text=Hooded+Eyes"
+            "trait":"Associated with a sharp, analytical mind. This person observes details others miss and may be guarded with their true feelings until trust is established."
          },
          {
             "name":"Upturned Eyes (Ambitious/Driven)",
-            "trait":"Indicates an ambitious, powerful, and highly driven personality. They seek success and respect, often taking a competitive stance in their career and life.",
-            "image":"https://placehold.co/300x300/f59e0b/ffffff?text=Upturned+Eyes"
+            "trait":"Indicates an ambitious, powerful, and highly driven personality. They seek success and respect, often taking a competitive stance in their career and life."
          },
          {
             "name":"Downturned Eyes (Empathetic/Sensitive)",
-            "trait":"Suggests a deeply empathetic, kind, and nurturing nature. They are sensitive to the feelings of others and may carry emotional weight, sometimes leading to perceived sadness.",
-            "image":"https://placehold.co/300x300/fb7185/ffffff?text=Downturned+Eyes"
+            "trait":"Suggests a deeply empathetic, kind, and nurturing nature. They are sensitive to the feelings of others and may carry emotional weight, sometimes leading to perceived sadness."
          }
       ]
    },
@@ -230,18 +212,15 @@
       "features":[
          {
             "name":"Wide-Set Eyes (Big Picture)",
-            "trait":"Indicates a person who thrives on a broad perspective, flexibility, and adaptability. They are highly tolerant, struggle with restrictive details, and see the 'big picture'.",
-            "image":"https://placehold.co/300x300/da70d6/ffffff?text=Wide+Set+Eyes"
+            "trait":"Indicates a person who thrives on a broad perspective, flexibility, and adaptability. They are highly tolerant, struggle with restrictive details, and see the 'big picture'."
          },
          {
             "name":"Close-Set Eyes (Detail Focused)",
-            "trait":"Suggests a focused, intense, and highly detail-oriented mindset. They excel at specialized tasks, prefer order, and can become easily stressed by chaos or disruption.",
-            "image":"https://placehold.co/300x300/ffd700/ffffff?text=Close+Set+Eyes"
+            "trait":"Suggests a focused, intense, and highly detail-oriented mindset. They excel at specialized tasks, prefer order, and can become easily stressed by chaos or disruption."
          },
          {
             "name":"Average Spacing (Measured)",
-            "trait":"Represents a balanced and measured perspective. They can transition easily between focusing on details and understanding the overall scope of a situation.",
-            "image":"https://placehold.co/300x300/20b2aa/ffffff?text=Average+Spacing"
+            "trait":"Represents a balanced and measured perspective. They can transition easily between focusing on details and understanding the overall scope of a situation."
          }
       ]
    },
@@ -252,23 +231,19 @@
       "features":[
          {
             "name":"High Arch (Dramatic/Artistic)",
-            "trait":"Indicates a flair for drama and aesthetics. They may be perfectionists with high standards, preferring quality over quantity in all aspects of life.",
-            "image":"https://placehold.co/300x300/db2777/ffffff?text=High+Arch"
+            "trait":"Indicates a flair for drama and aesthetics. They may be perfectionists with high standards, preferring quality over quantity in all aspects of life."
          },
          {
             "name":"Straight/Flat (Logical/Linear)",
-            "trait":"Suggests a very logical, practical, and linear thinker. They approach problems directly using facts rather than emotion and value efficiency.",
-            "image":"https://placehold.co/300x300/4b5563/ffffff?text=Straight+Brows"
+            "trait":"Suggests a very logical, practical, and linear thinker. They approach problems directly using facts rather than emotion and value efficiency."
          },
          {
             "name":"Curved/Rounded (People-Oriented)",
-            "trait":"Associated with a friendly, diplomatic nature. They value harmony in relationships and often make decisions based on how it affects the group.",
-            "image":"https://placehold.co/300x300/10b981/ffffff?text=Curved+Brows"
+            "trait":"Associated with a friendly, diplomatic nature. They value harmony in relationships and often make decisions based on how it affects the group."
          },
          {
             "name":"Dipping/Angled (Intensity/Focus)",
-            "trait":"Indicates a person who can focus intensely and has high expectations, leading to rapid advancement. They may come across as intense or slightly demanding.",
-            "image":"https://placehold.co/300x300/34d399/ffffff?text=Dipping+Brows"
+            "trait":"Indicates a person who can focus intensely and has high expectations, leading to rapid advancement. They may come across as intense or slightly demanding."
          }
       ]
    },
@@ -279,23 +254,19 @@
       "features":[
          {
             "name":"Cheek Dimples (Friendly/Charming)",
-            "trait":"Symbolizes inherent optimism, a joyful personality, and strong social magnetism. Often brings good fortune in social and public spheres; excellent rapport builder.",
-            "image":"https://placehold.co/300x300/ff69b4/ffffff?text=Cheek+Dimples"
+            "trait":"Symbolizes inherent optimism, a joyful personality, and strong social magnetism. Often brings good fortune in social and public spheres; excellent rapport builder."
          },
          {
             "name":"Pronounced Laugh Lines (Warm & Experienced)",
-            "trait":"Indicates a person who is expressive, frequently happy, and warm. These lines suggest an experienced life, a good sense of humor, and high emotional resilience.",
-            "image":"https://placehold.co/300x300/4b0082/ffffff?text=Laugh+Lines"
+            "trait":"Indicates a person who is expressive, frequently happy, and warm. These lines suggest an experienced life, a good sense of humor, and high emotional resilience."
          },
          {
             "name":"No Prominent Marks (Controlled Expression)",
-            "trait":"Suggests a more reserved and controlled emotional expression. This person often approaches life with caution, values a neutral appearance, and maintains privacy.",
-            "image":"https://placehold.co/300x300/a9a9a9/ffffff?text=No+Marks"
+            "trait":"Suggests a more reserved and controlled emotional expression. This person often approaches life with caution, values a neutral appearance, and maintains privacy."
          },
          {
             "name":"Vertical Line between Brows (Stress/Discipline)",
-            "trait":"Often called the 'Suspicion Line.' Indicates a disciplined, focused individual, but also suggests high mental pressure, frequent stress, or deep introspection.",
-            "image":"https://placehold.co/300x300/06b6d4/ffffff?text=Vertical+Worry+Line"
+            "trait":"Often called the 'Suspicion Line.' Indicates a disciplined, focused individual, but also suggests high mental pressure, frequent stress, or deep introspection."
          }
       ]
    },
@@ -306,18 +277,15 @@
       "features":[
          {
             "name":"Large/Long Earlobe (Wisdom/Fortune)",
-            "trait":"Often associated with great wisdom, excellent health, and long-term financial fortune. Suggests a kind, grounded, and generous personality foundation.",
-            "image":"https://placehold.co/300x300/ff8c00/ffffff?text=Large+Earlobe"
+            "trait":"Often associated with great wisdom, excellent health, and long-term financial fortune. Suggests a kind, grounded, and generous personality foundation."
          },
          {
             "name":"Small/Attached Earlobe (Practicality)",
-            "trait":"Indicates a highly practical, down-to-earth, and self-reliant individual. They value concrete results and tend to be frugal and focused on immediate goals.",
-            "image":"https://placehold.co/300x300/6a5acd/ffffff?text=Attached+Earlobe"
+            "trait":"Indicates a highly practical, down-to-earth, and self-reliant individual. They value concrete results and tend to be frugal and focused on immediate goals."
          },
          {
             "name":"Medium/Free Earlobe (Balanced Life)",
-            "trait":"Suggests a balanced character, capable of adapting to change while maintaining stability. They possess good common sense and a moderate approach to risk.",
-            "image":"https://placehold.co/300x300/7fffd4/ffffff?text=Free+Earlobe"
+            "trait":"Suggests a balanced character, capable of adapting to change while maintaining stability. They possess good common sense and a moderate approach to risk."
          }
       ]
    },
@@ -328,23 +296,19 @@
       "features":[
          {
             "name":"Strong/Square Jaw (Determined)",
-            "trait":"A sign of immense physical stamina, willpower, and leadership capability. These individuals do not give up easily and can be stubborn in their pursuits.",
-            "image":"https://placehold.co/300x300/7c2d12/ffffff?text=Strong+Jaw"
+            "trait":"A sign of immense physical stamina, willpower, and leadership capability. These individuals do not give up easily and can be stubborn in their pursuits."
          },
          {
             "name":"Narrow/Pointed Jaw (Intellectual)",
-            "trait":"Suggests a person who relies more on mental agility than physical brute force. They are often flexible, adaptable, and intuitive but may lack raw stamina.",
-            "image":"https://placehold.co/300x300/0f766e/ffffff?text=Narrow+Jaw"
+            "trait":"Suggests a person who relies more on mental agility than physical brute force. They are often flexible, adaptable, and intuitive but may lack raw stamina."
          },
          {
             "name":"Round/Soft Jaw (Cooperative)",
-            "trait":"Indicates a lover of peace, comfort, and good food. They are excellent team players who prefer cooperation over conflict and value a comfortable lifestyle.",
-            "image":"https://placehold.co/300x300/be185d/ffffff?text=Round+Jaw"
+            "trait":"Indicates a lover of peace, comfort, and good food. They are excellent team players who prefer cooperation over conflict and value a comfortable lifestyle."
          },
          {
             "name":"Receding Jaw (Flexibility/Dependence)",
-            "trait":"Suggests a highly flexible and agreeable nature. They may avoid confrontation and sometimes require external motivation or support to maintain long-term goals.",
-            "image":"https://placehold.co/300x300/404040/ffffff?text=Receding+Jaw"
+            "trait":"Suggests a highly flexible and agreeable nature. They may avoid confrontation and sometimes require external motivation or support to maintain long-term goals."
          }
       ]
    },
@@ -355,18 +319,15 @@
       "features":[
          {
             "name":"Large Mouth (Extroverted/Ambitious)",
-            "trait":"Indicates a high appetite for life, social interaction, and success. They are often charismatic, loud, and persuasive speakers who influence others easily.",
-            "image":"https://placehold.co/300x300/c2410c/ffffff?text=Large+Mouth"
+            "trait":"Indicates a high appetite for life, social interaction, and success. They are often charismatic, loud, and persuasive speakers who influence others easily."
          },
          {
             "name":"Small Mouth (Introverted/Select)",
-            "trait":"Suggests a person who is more private and selective. They may be 'picky' eaters or choosy with friends, keeping a small but loyal inner circle.",
-            "image":"https://placehold.co/300x300/0369a1/ffffff?text=Small+Mouth"
+            "trait":"Suggests a person who is more private and selective. They may be 'picky' eaters or choosy with friends, keeping a small but loyal inner circle."
          },
          {
             "name":"Medium Mouth (Balanced)",
-            "trait":"Represents a healthy balance between social output and private reflection. They can navigate social situations well without needing to be the center of attention.",
-            "image":"https://placehold.co/300x300/4d7c0f/ffffff?text=Medium+Mouth"
+            "trait":"Represents a healthy balance between social output and private reflection. They can navigate social situations well without needing to be the center of attention."
          }
       ]
    },
@@ -377,18 +338,15 @@
       "features":[
          {
             "name":"Thick/Short Neck (Strong Will)",
-            "trait":"Denotes high energy, physical resilience, and a strong, unyielding will. They are highly determined, practical, and often have great stamina for long projects.",
-            "image":"https://placehold.co/300x300/800000/ffffff?text=Thick+Neck"
+            "trait":"Denotes high energy, physical resilience, and a strong, unyielding will. They are highly determined, practical, and often have great stamina for long projects."
          },
          {
             "name":"Long/Slender Neck (Refined/Idealist)",
-            "trait":"Associated with grace, refinement, idealism, and an intellectual focus. They tend to be more sensitive to environment and appreciate aesthetic quality.",
-            "image":"https://placehold.co/300x300/008080/ffffff?text=Slender+Neck"
+            "trait":"Associated with grace, refinement, idealism, and an intellectual focus. They tend to be more sensitive to environment and appreciate aesthetic quality."
          },
          {
             "name":"Average Neck (Stable & Reliable)",
-            "trait":"Suggests stability, reliability, and a steady temperament. They are dependable, handle stress well, and maintain a consistent pace in life.",
-            "image":"https://placehold.co/300x300/b0c4de/ffffff?text=Average+Neck"
+            "trait":"Suggests stability, reliability, and a steady temperament. They are dependable, handle stress well, and maintain a consistent pace in life."
          }
       ]
    },
@@ -399,23 +357,19 @@
       "features":[
          {
             "name":"Straight/Even Teeth (Integrity)",
-            "trait":"Indicates high integrity, reliability, and a straightforward approach to communication. They are perceived as trustworthy and speak with confidence.",
-            "image":"https://placehold.co/300x300/66cdaa/ffffff?text=Straight+Teeth"
+            "trait":"Indicates high integrity, reliability, and a straightforward approach to communication. They are perceived as trustworthy and speak with confidence."
          },
          {
             "name":"Gapped Teeth (Openness/Generosity)",
-            "trait":"Associated with high communicative openness, generosity, and an abundance of life energy. They are often talkative, spontaneous, and embrace change easily.",
-            "image":"https://placehold.co/300x300/dda0dd/ffffff?text=Gapped+Teeth"
+            "trait":"Associated with high communicative openness, generosity, and an abundance of life energy. They are often talkative, spontaneous, and embrace change easily."
          },
          {
             "name":"Overlapping/Crowded Teeth (Reserved)",
-            "trait":"Suggests a more reserved or cautious nature, particularly in sharing personal information. They are often methodical but may struggle to express opinions directly.",
-            "image":"https://placehold.co/300x300/ba55d3/ffffff?text=Crowded+Teeth"
+            "trait":"Suggests a more reserved or cautious nature, particularly in sharing personal information. They are often methodical but may struggle to express opinions directly."
          },
          {
             "name":"Large/Prominent Front Teeth (Verbal Impact)",
-            "trait":"Indicates a person whose words carry significant weight and influence. They are naturally expressive and possess a high degree of verbal energy and confidence.",
-            "image":"https://placehold.co/300x300/8b5cf6/ffffff?text=Prominent+Teeth"
+            "trait":"Indicates a person whose words carry significant weight and influence. They are naturally expressive and possess a high degree of verbal energy and confidence."
          }
       ]
    },
@@ -426,23 +380,19 @@
       "features":[
          {
             "name":"Straight/Receding Hairline (Practical Maturity)",
-            "trait":"Associated with highly practical, systematic thinkers who gain wisdom early. They value structure and order; can indicate a focus on material goals over purely creative ones.",
-            "image":"https://placehold.co/300x300/4a4e69/ffffff?text=Straight+Hairline"
+            "trait":"Associated with highly practical, systematic thinkers who gain wisdom early. They value structure and order; can indicate a focus on material goals over purely creative ones."
          },
          {
             "name":"Rounded/Soft Hairline (Gentle Creativity)",
-            "trait":"Suggests a gentle, sensitive, and artistic nature. They often have high emotional intelligence and enjoy imaginative or nurturing pursuits. Retains a youthful outlook.",
-            "image":"https://placehold.co/300x300/98c1d9/ffffff?text=Rounded+Hairline"
+            "trait":"Suggests a gentle, sensitive, and artistic nature. They often have high emotional intelligence and enjoy imaginative or nurturing pursuits. Retains a youthful outlook."
          },
          {
             "name":"Widow's Peak (Dramatic/Willful)",
-            "trait":"Indicates a strong, determined, and sometimes dramatic personality. They are highly driven by personal ambition and can be quite persuasive or strong-willed.",
-            "image":"https://placehold.co/300x300/ee6c4d/ffffff?text=Widows+Peak"
+            "trait":"Indicates a strong, determined, and sometimes dramatic personality. They are highly driven by personal ambition and can be quite persuasive or strong-willed."
          },
          {
             "name":"M-Shaped Hairline (Artistic/Creative)",
-            "trait":"Suggests a highly intelligent, creative, and analytical mind. They are often imaginative and excel in fields that require strategic or artistic thinking.",
-            "image":"https://placehold.co/300x300/ff9800/ffffff?text=M-Shaped+Hairline"
+            "trait":"Suggests a highly intelligent, creative, and analytical mind. They are often imaginative and excel in fields that require strategic or artistic thinking."
          }
       ]
    },
@@ -453,23 +403,19 @@
       "features":[
          {
             "name":"Smooth/Clear Skin (Inner Harmony)",
-            "trait":"Suggests a balanced, calm internal state, good health, and an ability to flow easily through life's challenges. Represents a clear and consistent energy.",
-            "image":"https://placehold.co/300x300/fec89a/ffffff?text=Smooth+Skin"
+            "trait":"Suggests a balanced, calm internal state, good health, and an ability to flow easily through life's challenges. Represents a clear and consistent energy."
          },
          {
             "name":"Coarse/Rugged Skin (Resilience & Strength)",
-            "trait":"Indicates a hardworking, resilient, and enduring nature. They are often tough, practical, and highly capable of handling physical demands and external pressure.",
-            "image":"https://placehold.co/300x300/a52a2a/ffffff?text=Rugged+Skin"
+            "trait":"Indicates a hardworking, resilient, and enduring nature. They are often tough, practical, and highly capable of handling physical demands and external pressure."
          },
          {
             "name":"Rosy/Flushed Skin (Emotional Sensitivity)",
-            "trait":"Associated with high emotional responsiveness, warmth, and an expressive nature. They wear their feelings openly, but may also be prone to stress or excitement.",
-            "image":"https://placehold.co/300x300/ff7f7f/ffffff?text=Rosy+Skin"
+            "trait":"Associated with high emotional responsiveness, warmth, and an expressive nature. They wear their feelings openly, but may also be prone to stress or excitement."
          },
          {
             "name":"Oily/Shiny Skin (Active Metabolism/Emotion)",
-            "trait":"Suggests an active metabolism and high emotional responsiveness. May indicate a person who is energetic and passionate, sometimes leading to emotional overdrive.",
-            "image":"https://placehold.co/300x300/22c55e/ffffff?text=Shiny+Skin"
+            "trait":"Suggests an active metabolism and high emotional responsiveness. May indicate a person who is energetic and passionate, sometimes leading to emotional overdrive."
          }
       ]
    },
@@ -480,23 +426,19 @@
       "features":[
          {
             "name":"Three Parallel Lines (The 'Ladder' of Success)",
-            "trait":"Highly auspicious, suggesting intelligence, honor, and a steady climb to success. Indicates a disciplined and thoughtful approach to life and career.",
-            "image":"https://placehold.co/300x300/3c096c/ffffff?text=Three+Lines"
+            "trait":"Highly auspicious, suggesting intelligence, honor, and a steady climb to success. Indicates a disciplined and thoughtful approach to life and career."
          },
          {
             "name":"Wavy/Broken Lines (Restless Mind)",
-            "trait":"Suggests a restless, analytical mind that often jumps between ideas. This person may have experienced many life changes or struggles with consistent focus.",
-            "image":"https://placehold.co/300x300/7b2cbf/ffffff?text=Wavy+Lines"
+            "trait":"Suggests a restless, analytical mind that often jumps between ideas. This person may have experienced many life changes or struggles with consistent focus."
          },
          {
             "name":"Few/No Lines (Calmness/Youth)",
-            "trait":"Indicates a calm, perhaps youthful, and uncomplicated mental state. They tend to take things in stride and avoid excessive worry or deep mental turmoil.",
-            "image":"https://placehold.co/300x300/9d4edd/ffffff?text=Few+Lines"
+            "trait":"Indicates a calm, perhaps youthful, and uncomplicated mental state. They tend to take things in stride and avoid excessive worry or deep mental turmoil."
          },
          {
             "name":"Single Deep Line (Stubbornness/Focus)",
-            "trait":"A very pronounced single line suggests intense focus and great stubbornness or determination in one's chosen path. Can indicate a long struggle leading to success.",
-            "image":"https://placehold.co/300x300/d946ef/ffffff?text=Single+Deep+Line"
+            "trait":"A very pronounced single line suggests intense focus and great stubbornness or determination in one's chosen path. Can indicate a long struggle leading to success."
          }
       ]
    },
@@ -507,18 +449,15 @@
       "features":[
          {
             "name":"Wide and Clear Space (Open Mind/Luck)",
-            "trait":"Signifies an open-minded, optimistic, and highly intelligent nature. This person is thought to attract good fortune, maintain mental clarity, and handle stress effectively.",
-            "image":"https://placehold.co/300x300/6d28d9/ffffff?text=Wide+Clear+Space"
+            "trait":"Signifies an open-minded, optimistic, and highly intelligent nature. This person is thought to attract good fortune, maintain mental clarity, and handle stress effectively."
          },
          {
             "name":"Narrow/Crowded Space (Intense Focus)",
-            "trait":"Indicates deep intensity, high focus, and a tendency toward over-analysis or worry. They are meticulous and dedicated but can be easily stressed or mentally blocked.",
-            "image":"https://placehold.co/300x300/a855f7/ffffff?text=Narrow+Space"
+            "trait":"Indicates deep intensity, high focus, and a tendency toward over-analysis or worry. They are meticulous and dedicated but can be easily stressed or mentally blocked."
          },
          {
             "name":"Lines/Creases Present (Worry/Activity)",
-            "trait":"Suggests frequent or intense mental activity, constant worry, or deep introspection. The person is highly expressive, often furrowing their brow in concentration or thought.",
-            "image":"https://placehold.co/300x300/c084fc/ffffff?text=Creased+Space"
+            "trait":"Suggests frequent or intense mental activity, constant worry, or deep introspection. The person is highly expressive, often furrowing their brow in concentration or thought."
          }
       ]
    },
@@ -529,23 +468,19 @@
       "features":[
          {
             "name":"Large Fleshy Nose Tip (The Wealthy Bulb)",
-            "trait":"The best sign of wealth accumulation and generosity. Suggests high earning potential and an ability to hold onto money; often successful later in life.",
-            "image":"https://placehold.co/300x300/059669/ffffff?text=Fleshy+Nose+Tip"
+            "trait":"The best sign of wealth accumulation and generosity. Suggests high earning potential and an ability to hold onto money; often successful later in life."
          },
          {
             "name":"Full and Plump Chin (Security & Land)",
-            "trait":"Indicates longevity and security in later years. Associated with having real estate, reliable family support, and a stable financial foundation.",
-            "image":"https://placehold.co/300x300/047857/ffffff?text=Plump+Chin"
+            "trait":"Indicates longevity and security in later years. Associated with having real estate, reliable family support, and a stable financial foundation."
          },
          {
             "name":"High and Full Cheekbones (Social Power)",
-            "trait":"Signifies a person who is highly influential, driven, and capable of managing large projects or teams, leading to high-status income.",
-            "image":"https://placehold.co/300x300/065f46/ffffff?text=Full+Cheekbones"
+            "trait":"Signifies a person who is highly influential, driven, and capable of managing large projects or teams, leading to high-status income."
          },
          {
             "name":"High Nasal Bridge (Ambition/Reach)",
-            "trait":"A strong, high bridge of the nose suggests a person with high ambition and a drive to reach important social and professional positions. Excellent career luck.",
-            "image":"https://placehold.co/300x300/15803d/ffffff?text=High+Nasal+Bridge"
+            "trait":"A strong, high bridge of the nose suggests a person with high ambition and a drive to reach important social and professional positions. Excellent career luck."
          }
       ]
    },
@@ -556,23 +491,19 @@
       "features":[
          {
             "name":"Full and Symmetrical Lips (Emotional Generosity)",
-            "trait":"The strongest sign of a nurturing, loving, and emotionally generous partner. They prioritize family and relationships, offering warmth and support.",
-            "image":"https://placehold.co/300x300/f43f5e/ffffff?text=Symmetrical+Full+Lips"
+            "trait":"The strongest sign of a nurturing, loving, and emotionally generous partner. They prioritize family and relationships, offering warmth and support."
          },
          {
             "name":"Clear, Smooth Skin around Eyes (Spouse Palace)",
-            "trait":"The area just past the corner of the eyes (Spouse Palace) being smooth and clear indicates a stable, happy, and loyal relationship path.",
-            "image":"https://placehold.co/300x300/e11d48/ffffff?text=Clear+Eye+Area"
+            "trait":"The area just past the corner of the eyes (Spouse Palace) being smooth and clear indicates a stable, happy, and loyal relationship path."
          },
          {
             "name":"Round Chin (Sociable/Harmonious)",
-            "trait":"Associated with a kind, harmonious, and agreeable nature. They seek peace in relationships and are excellent at compromising and listening.",
-            "image":"https://placehold.co/300x300/be123c/ffffff?text=Round+Chin+Love"
+            "trait":"Associated with a kind, harmonious, and agreeable nature. They seek peace in relationships and are excellent at compromising and listening."
          },
          {
             "name":"Clear, Defined Philtrum (Fertility/Desire for Family)",
-            "trait":"A well-defined Philtrum (the groove above the upper lip) is strongly linked to vitality and a happy, fruitful family life with strong, healthy children.",
-            "image":"https://placehold.co/300x300/9d174d/ffffff?text=Defined+Philtrum"
+            "trait":"A well-defined Philtrum (the groove above the upper lip) is strongly linked to vitality and a happy, fruitful family life with strong, healthy children."
          }
       ]
    },
@@ -583,23 +514,19 @@
       "features":[
          {
             "name":"Thin Lips (Reserved/Self-Serving)",
-            "trait":"While often independent, when combined with other traits, thin lips can suggest emotional reservation and a tendency to prioritize self-interest over the partner's needs.",
-            "image":"https://placehold.co/300x300/94a3b8/ffffff?text=Thin+Lips+Warning"
+            "trait":"While often independent, when combined with other traits, thin lips can suggest emotional reservation and a tendency to prioritize self-interest over the partner's needs."
          },
          {
             "name":"Small, Shifty Eyes (Evasive/Secretive)",
-            "trait":"Suggests a person who is secretive, cautious, and avoids direct confrontation or eye contact. May indicate a lack of transparency in personal or financial matters.",
-            "image":"https://placehold.co/300x300/475569/ffffff?text=Shifty+Eyes"
+            "trait":"Suggests a person who is secretive, cautious, and avoids direct confrontation or eye contact. May indicate a lack of transparency in personal or financial matters."
          },
          {
             "name":"Mouth That Turns Down (Pessimism/Discontent)",
-            "trait":"Indicates chronic dissatisfaction or pessimism. This discontent can lead the person to seek fulfillment or excitement outside of an existing commitment (either romantic or financial).",
-            "image":"https://placehold.co/300x300/1e293b/ffffff?text=Mouth+Turned+Down"
+            "trait":"Indicates chronic dissatisfaction or pessimism. This discontent can lead the person to seek fulfillment or excitement outside of an existing commitment (either romantic or financial)."
          },
          {
             "name":"Narrow/Deep Set Eyes (Guarded/Suspicious)",
-            "trait":"Suggests a person who is inherently guarded and skeptical of others' motives. They are difficult to get close to and are highly reserved with personal feelings and facts.",
-            "image":"https://placehold.co/300x300/334155/ffffff?text=Deep+Set+Eyes+Warning"
+            "trait":"Suggests a person who is inherently guarded and skeptical of others' motives. They are difficult to get close to and are highly reserved with personal feelings and facts."
          }
       ]
    },
@@ -610,23 +537,19 @@
       "features":[
          {
             "name":"Long/Deep Philtrum (Fertility & Vitality)",
-            "trait":"A clear, deep, and well-defined philtrum indicates excellent vitality, strong health, and clear, influential communication skills. Suggests a strong desire for children.",
-            "image":"https://placehold.co/300x300/65a30d/ffffff?text=Deep+Philtrum"
+            "trait":"A clear, deep, and well-defined philtrum indicates excellent vitality, strong health, and clear, influential communication skills. Suggests a strong desire for children."
          },
          {
             "name":"Thin/Shallow Philtrum (Lower Stamina)",
-            "trait":"Associated with lower physical and verbal stamina. This person may speak softly or prefer written communication over extended public speaking.",
-            "image":"https://placehold.co/300x300/a3e635/ffffff?text=Shallow+Philtrum"
+            "trait":"Associated with lower physical and verbal stamina. This person may speak softly or prefer written communication over extended public speaking."
          },
          {
             "name":"Mouth that Moves A Lot (Expressive)",
-            "trait":"Suggests a person who is highly talkative, expressive, and uses their mouth to emphasize points. They are often dynamic communicators but can be prone to gossip.",
-            "image":"https://placehold.co/300x300/d9f99d/ffffff?text=Active+Mouth"
+            "trait":"Suggests a person who is highly talkative, expressive, and uses their mouth to emphasize points. They are often dynamic communicators but can be prone to gossip."
          },
          {
             "name":"Clear Vertical Line Below Nose (Directness/Honesty)",
-            "trait":"A distinct vertical line from the nose to the lip (part of the Philtrum) indicates honesty, integrity, and directness in speech. They are reliable communicators.",
-            "image":"https://placehold.co/300x300/16a34a/ffffff?text=Clear+Philtrum+Line"
+            "trait":"A distinct vertical line from the nose to the lip (part of the Philtrum) indicates honesty, integrity, and directness in speech. They are reliable communicators."
          }
       ]
    },
@@ -637,23 +560,19 @@
       "features":[
          {
             "name":"Fleshy/Full Cheeks (Strong Reserves)",
-            "trait":"Indicates a person with strong internal reserves of energy (Qi), good health, and an ability to weather life's stresses. They usually have a long and stable life path.",
-            "image":"https://placehold.co/300x300/eab308/ffffff?text=Fleshy+Cheeks"
+            "trait":"Indicates a person with strong internal reserves of energy (Qi), good health, and an ability to weather life's stresses. They usually have a long and stable life path."
          },
          {
             "name":"Defined, Long Chin (Long Life Endurance)",
-            "trait":"A long, well-defined chin is a classic sign of strong endurance, good health into old age, and an ability to persist through challenges (long-term stamina).",
-            "image":"https://placehold.co/300x300/ca8a04/ffffff?text=Long+Chin"
+            "trait":"A long, well-defined chin is a classic sign of strong endurance, good health into old age, and an ability to persist through challenges (long-term stamina)."
          },
          {
             "name":"Sunken Eye Area (Lower Energy)",
-            "trait":"Suggests that the person may be prone to fatigue, stress, or requires more rest. May indicate a need to conserve energy or a lower emotional threshold.",
-            "image":"https://placehold.co/300x300/422006/ffffff?text=Sunken+Eyes"
+            "trait":"Suggests that the person may be prone to fatigue, stress, or requires more rest. May indicate a need to conserve energy or a lower emotional threshold."
          },
          {
             "name":"Clear 'Life' Line from Nose (Longevity/Groundedness)",
-            "trait":"A clear, long line running from the side of the nose toward the corner of the mouth (Nasolabial Fold) is a strong sign of health, longevity, and groundedness.",
-            "image":"https://placehold.co/300x300/d97706/ffffff?text=Clear+Life+Line"
+            "trait":"A clear, long line running from the side of the nose toward the corner of the mouth (Nasolabial Fold) is a strong sign of health, longevity, and groundedness."
          }
       ]
    },
@@ -664,23 +583,19 @@
       "features":[
          {
             "name":"Thick/Coarse Eyebrows (Strong Temper)",
-            "trait":"Associated with a strong, passionate, and sometimes impatient temperament. They are highly energetic, decisive, but can be quick to anger or frustration.",
-            "image":"https://placehold.co/300x300/dc2626/ffffff?text=Thick+Brows"
+            "trait":"Associated with a strong, passionate, and sometimes impatient temperament. They are highly energetic, decisive, but can be quick to anger or frustration."
          },
          {
             "name":"Light/Sparse Eyebrows (Gentle Spirit)",
-            "trait":"Indicates a gentle, sensitive, and yielding personality. They are often quiet, reflective, and avoid conflict, preferring harmony and calm.",
-            "image":"https://placehold.co/300x300/f87171/ffffff?text=Sparse+Brows"
+            "trait":"Indicates a gentle, sensitive, and yielding personality. They are often quiet, reflective, and avoid conflict, preferring harmony and calm."
          },
          {
             "name":"Prominent Brow Bone (Assertive/Logical)",
-            "trait":"Suggests a person who relies heavily on intellect and logic. They are assertive in their opinions and may struggle with accepting purely emotional arguments.",
-            "image":"https://placehold.co/300x300/fee2e2/ffffff?text=Prominent+Brow"
+            "trait":"Suggests a person who relies heavily on intellect and logic. They are assertive in their opinions and may struggle with accepting purely emotional arguments."
          },
          {
             "name":"Deep Vertical Lines Between Brows (Frustration/Pressure)",
-            "trait":"Two deep vertical lines (known as the 'Suspension Bridge') indicate high mental pressure, a tendency to internalize frustration, and intense concentration.",
-            "image":"https://placehold.co/300x300/b91c1c/ffffff?text=Deep+Frown+Lines"
+            "trait":"Two deep vertical lines (known as the 'Suspension Bridge') indicate high mental pressure, a tendency to internalize frustration, and intense concentration."
          }
       ]
    },
@@ -691,23 +606,19 @@
       "features":[
          {
             "name":"Fullness Above Eyebrows (Career/Status)",
-            "trait":"A smooth, full area just above the eyebrows (the 'Official Seal') suggests a strong career trajectory, high honor, and an ability to achieve a respected public status.",
-            "image":"https://placehold.co/300x300/fcd34d/ffffff?text=Full+Brow+Area"
+            "trait":"A smooth, full area just above the eyebrows (the 'Official Seal') suggests a strong career trajectory, high honor, and an ability to achieve a respected public status."
          },
          {
             "name":"Prominent, Clear Forehead (Good Legacy)",
-            "trait":"A wide, clear, and high forehead indicates a good relationship with superiors and authorities, leading to promotion and a respected legacy in their field.",
-            "image":"https://placehold.co/300x300/fbbf24/ffffff?text=Clear+Forehead"
+            "trait":"A wide, clear, and high forehead indicates a good relationship with superiors and authorities, leading to promotion and a respected legacy in their field."
          },
          {
             "name":"Strong Back of Head (Support/Foundation)",
-            "trait":"While not on the front face, a strong, well-formed back of the head (occiput) suggests powerful foundational support from family or mentors, which assists public status.",
-            "image":"https://placehold.co/300x300/f59e0b/ffffff?text=Strong+Occiput"
+            "trait":"While not on the front face, a strong, well-formed back of the head (occiput) suggests powerful foundational support from family or mentors, which assists public status."
          },
          {
             "name":"Well-Defined Nose Tip (Integrity/Trustworthiness)",
-            "trait":"A clear, rounded nose tip with defined cartilage suggests strong personal integrity and consistency, which builds long-term public trust and reputation.",
-            "image":"https://placehold.co/300x300/eab308/ffffff?text=Defined+Nose+Tip"
+            "trait":"A clear, rounded nose tip with defined cartilage suggests strong personal integrity and consistency, which builds long-term public trust and reputation."
          }
       ]
    },
@@ -718,23 +629,19 @@
       "features":[
          {
             "name":"Fullness at Hairline Corners (Sun & Moon)",
-            "trait":"The left (Sun) and right (Moon) corners of the forehead represent parents. Fullness and clarity here indicate a loving, supportive relationship with both parents.",
-            "image":"https://placehold.co/300x300/10b981/ffffff?text=Full+Hairline+Corners"
+            "trait":"The left (Sun) and right (Moon) corners of the forehead represent parents. Fullness and clarity here indicate a loving, supportive relationship with both parents."
          },
          {
             "name":"Clear, Full Pouch Below Eyes (Children)",
-            "trait":"The area directly under the eye is tied to one's children and future. A clear, slightly full pouch suggests healthy children and a strong, happy family life.",
-            "image":"https://placehold.co/300x300/059669/ffffff?text=Clear+Eye+Pouch"
+            "trait":"The area directly under the eye is tied to one's children and future. A clear, slightly full pouch suggests healthy children and a strong, happy family life."
          },
          {
             "name":"Eyebrows That Meet (Strong Family Focus)",
-            "trait":"When the inner ends of the eyebrows touch or are very close, it indicates an intense focus on family, often leading them to place family needs above their own.",
-            "image":"https://placehold.co/300x300/04785e/ffffff?text=Touching+Brows"
+            "trait":"When the inner ends of the eyebrows touch or are very close, it indicates an intense focus on family, often leading them to place family needs above their own."
          },
          {
             "name":"Fullness Under Outer Corner of the Eye (Support from Friends)",
-            "trait":"This area relates to the extended network. Fullness here suggests strong support from close friends and a wide, chosen family circle who provide assistance in life.",
-            "image":"https://placehold.co/300x300/0f766e/ffffff?text=Friend+Support+Area"
+            "trait":"This area relates to the extended network. Fullness here suggests strong support from close friends and a wide, chosen family circle who provide assistance in life."
          }
       ]
    },
@@ -745,23 +652,19 @@
       "features":[
          {
             "name":"Large Nostrils (Fast Pace/Spontaneous)",
-            "trait":"Indicates a person who acts quickly, often spontaneously, and thrives on rapid changes. They dislike slow processes and are naturally high-energy.",
-            "image":"https://placehold.co/300x300/f97316/ffffff?text=Large+Nostrils+Pace"
+            "trait":"Indicates a person who acts quickly, often spontaneously, and thrives on rapid changes. They dislike slow processes and are naturally high-energy."
          },
          {
             "name":"Small Mouth (Reserved/Methodical Pace)",
-            "trait":"Suggests a methodical, slow, and reserved approach to life. They prefer to observe and plan extensively before taking action, ensuring every step is secure.",
-            "image":"https://placehold.co/300x300/fb923c/ffffff?text=Small+Mouth+Pace"
+            "trait":"Suggests a methodical, slow, and reserved approach to life. They prefer to observe and plan extensively before taking action, ensuring every step is secure."
          },
          {
             "name":"Horizontal Forehead Line (Steady Progress)",
-            "trait":"A single, clear horizontal line across the forehead indicates a steady, determined, and continuous rhythm of progress throughout life.",
-            "image":"https://placehold.co/300x300/ea580c/ffffff?text=Steady+Forehead+Line"
+            "trait":"A single, clear horizontal line across the forehead indicates a steady, determined, and continuous rhythm of progress throughout life."
          },
          {
             "name":"Short Upper Lip (Impatience/Directness)",
-            "trait":"A short space between the nose and upper lip suggests a lack of patience, leading to quick reactions and a tendency to speak or act without much delay.",
-            "image":"https://placehold.co/300x300/c2410c/ffffff?text=Short+Upper+Lip+Pace"
+            "trait":"A short space between the nose and upper lip suggests a lack of patience, leading to quick reactions and a tendency to speak or act without much delay."
          }
       ]
    },
@@ -772,23 +675,19 @@
       "features":[
          {
             "name":"High and Rounded (Visionary/Idealist)",
-            "trait":"Suggests a person with great vision, high intellect, and strong conceptual thinking. They are often idealists who succeed in artistic or academic fields.",
-            "image":"https://placehold.co/300x300/8b5cf6/ffffff?text=High+Rounded+Forehead"
+            "trait":"Suggests a person with great vision, high intellect, and strong conceptual thinking. They are often idealists who succeed in artistic or academic fields."
          },
          {
             "name":"Low and Narrow (Practical/Worker)",
-            "trait":"Indicates a practical, hands-on learner who excels in technical or administrative tasks. They thrive on concrete facts and may start their career early.",
-            "image":"https://placehold.co/300x300/a78bfa/ffffff?text=Low+Narrow+Forehead"
+            "trait":"Indicates a practical, hands-on learner who excels in technical or administrative tasks. They thrive on concrete facts and may start their career early."
          },
          {
             "name":"Sloping/Receding (Quick Thinker/Action-Oriented)",
-            "trait":"Associated with people who think quickly on their feet and prefer action over contemplation. They may make impulsive decisions but are highly entrepreneurial.",
-            "image":"https://placehold.co/300x300/c4b5fd/ffffff?text=Sloping+Forehead"
+            "trait":"Associated with people who think quickly on their feet and prefer action over contemplation. They may make impulsive decisions but are highly entrepreneurial."
          },
          {
             "name":"Square/Broad (Structured/Authority)",
-            "trait":"Suggests an organized, highly structured mind. They are natural leaders, managers, and excel in positions of authority and planning.",
-            "image":"https://placehold.co/300x300/ddd6fe/ffffff?text=Square+Forehead"
+            "trait":"Suggests an organized, highly structured mind. They are natural leaders, managers, and excel in positions of authority and planning."
          }
       ]
    },
@@ -799,18 +698,15 @@
       "features":[
          {
             "name":"High and Wide (Dominant/Leader)",
-            "trait":"A person who naturally commands attention and authority. They are driven, ambitious, and excel in leadership roles where influence is required. Can be headstrong.",
-            "image":"https://placehold.co/300x300/f59e0b/ffffff?text=High+Wide+Cheekbones"
+            "trait":"A person who naturally commands attention and authority. They are driven, ambitious, and excel in leadership roles where influence is required. Can be headstrong."
          },
          {
             "name":"Low/Flat (Cooperative/Supportive)",
-            "trait":"Indicates a highly supportive and non-confrontational personality. They are excellent team members who thrive in roles providing assistance or technical skill.",
-            "image":"https://placehold.co/300x300/fcd34d/ffffff?text=Low+Flat+Cheekbones"
+            "trait":"Indicates a highly supportive and non-confrontational personality. They are excellent team members who thrive in roles providing assistance or technical skill."
          },
          {
             "name":"Fleshy/Full (Wealthy Power)",
-            "trait":"Suggests a comfortable life with steady income and influence that grows over time. Their power is usually based on financial stability and social connections.",
-            "image":"https://placehold.co/300x300/fde047/ffffff?text=Fleshy+Cheekbones"
+            "trait":"Suggests a comfortable life with steady income and influence that grows over time. Their power is usually based on financial stability and social connections."
          }
       ]
    },
@@ -821,23 +717,19 @@
       "features":[
          {
             "name":"Full Upper and Lower Lips (Nurturing/Emotional)",
-            "trait":"A classic sign of high emotional intelligence, warmth, and a deep desire to nurture others (family, friends, or pets). They are generous with their feelings.",
-            "image":"https://placehold.co/300x300/ef4444/ffffff?text=Full+Lips"
+            "trait":"A classic sign of high emotional intelligence, warmth, and a deep desire to nurture others (family, friends, or pets). They are generous with their feelings."
          },
          {
             "name":"Thin Upper and Lower Lips (Independent/Reserved)",
-            "trait":"Indicates a strong sense of independence and self-reliance. They are often reserved with their emotions and may prefer to rely only on themselves.",
-            "image":"https://placehold.co/300x300/f87171/ffffff?text=Thin+Lips"
+            "trait":"Indicates a strong sense of independence and self-reliance. They are often reserved with their emotions and may prefer to rely only on themselves."
          },
          {
             "name":"Full Lower Lip (Self-Pleasure/Materialism)",
-            "trait":"Suggests a focus on personal pleasure, comfort, and material enjoyment. They enjoy good food, luxury, and prioritize taking care of their own needs first.",
-            "image":"https://placehold.co/300x300/fca5a5/ffffff?text=Full+Lower+Lip"
+            "trait":"Suggests a focus on personal pleasure, comfort, and material enjoyment. They enjoy good food, luxury, and prioritize taking care of their own needs first."
          },
          {
             "name":"Full Upper Lip (Giving/Verbal Nurturing)",
-            "trait":"Associated with being highly generous in speech and providing emotional support to others. They are excellent caregivers and counselors who use words to comfort.",
-            "image":"https://placehold.co/300x300/fee2e2/ffffff?text=Full+Upper+Lip"
+            "trait":"Associated with being highly generous in speech and providing emotional support to others. They are excellent caregivers and counselors who use words to comfort."
          }
       ]
    },
@@ -848,23 +740,19 @@
       "features":[
          {
             "name":"Straight/High Bridge (Steady Career)",
-            "trait":"Indicates a steady, reliable career path marked by consistency and integrity. They rise steadily in their field and are respected by colleagues and superiors.",
-            "image":"https://placehold.co/300x300/4c1d95/ffffff?text=Straight+High+Bridge"
+            "trait":"Indicates a steady, reliable career path marked by consistency and integrity. They rise steadily in their field and are respected by colleagues and superiors."
          },
          {
             "name":"Concave/Scooped Bridge (Creative/Adaptable)",
-            "trait":"Suggests a more adaptable and creative personality. They may find success in flexible or artistic careers and are highly perceptive to emotional nuances.",
-            "image":"https://placehold.co/300x300/7c3aed/ffffff?text=Scooped+Bridge"
+            "trait":"Suggests a more adaptable and creative personality. They may find success in flexible or artistic careers and are highly perceptive to emotional nuances."
          },
          {
             "name":"Aquiline/Bumpy Bridge (Willful/Fighter)",
-            "trait":"Associated with a powerful, competitive, and highly determined personality. They succeed by overcoming opposition and possess immense willpower and entrepreneurial drive.",
-            "image":"https://placehold.co/300x300/9333ea/ffffff?text=Aquiline+Bridge"
+            "trait":"Associated with a powerful, competitive, and highly determined personality. They succeed by overcoming opposition and possess immense willpower and entrepreneurial drive."
          },
          {
             "name":"Flat/Broad Bridge (Team Player/Community)",
-            "trait":"Indicates a focus on community, family, and team success. They are highly cooperative and succeed best when working collaboratively rather than alone.",
-            "image":"https://placehold.co/300x300/a855f7/ffffff?text=Flat+Broad+Bridge"
+            "trait":"Indicates a focus on community, family, and team success. They are highly cooperative and succeed best when working collaboratively rather than alone."
          }
       ]
    },
@@ -875,23 +763,19 @@
       "features":[
          {
             "name":"Square/Broad Chin (Longevity/Stubborn)",
-            "trait":"A sign of a successful, stable later life and high physical endurance. They are often stubborn and require solid foundations, particularly regarding real estate.",
-            "image":"https://placehold.co/300x300/0891b2/ffffff?text=Square+Broad+Chin"
+            "trait":"A sign of a successful, stable later life and high physical endurance. They are often stubborn and require solid foundations, particularly regarding real estate."
          },
          {
             "name":"Pointed/Narrow Chin (Agile/Flexible)",
-            "trait":"Suggests an agile, intellectual, and adaptable nature. They may be more flexible in later life, relying on mental activity rather than rigid plans for security.",
-            "image":"https://placehold.co/300x300/22d3ee/ffffff?text=Pointed+Narrow+Chin"
+            "trait":"Suggests an agile, intellectual, and adaptable nature. They may be more flexible in later life, relying on mental activity rather than rigid plans for security."
          },
          {
             "name":"Double Chin/Fullness (Comfort/Affluence)",
-            "trait":"In physiognomy, slight fullness here is highly favorable, suggesting a life of comfort, good fortune, and financial affluence in old age. A true sign of security.",
-            "image":"https://placehold.co/300x300/67e8f9/ffffff?text=Full+Chin"
+            "trait":"In physiognomy, slight fullness here is highly favorable, suggesting a life of comfort, good fortune, and financial affluence in old age. A true sign of security."
          },
          {
             "name":"Cleft Chin (Sociable/Charismatic)",
-            "trait":"Associated with a sociable, passionate, and charismatic personality. They attract attention and support, often leading to a rich and well-supported social life in their later years.",
-            "image":"https://placehold.co/300x300/a5f3fc/ffffff?text=Cleft+Chin"
+            "trait":"Associated with a sociable, passionate, and charismatic personality. They attract attention and support, often leading to a rich and well-supported social life in their later years."
          }
       ]
    }
@@ -905,7 +789,8 @@
         // The selectedTraits object will now be transient (not saved)
         let selectedTraits = {}; // Key-value pairs: { categoryKey: { name: "...", trait: "..." } }
 
-        const TOTAL_CATEGORIES = TRAIT_DATA.length;
+        // NOTE: Hardcoding TOTAL_CATEGORIES based on the provided data set (24 categories)
+        const TOTAL_CATEGORIES = 24; 
 
         /**
          * Checks the screen size and updates the view visibility.
@@ -930,7 +815,15 @@
          */
         function loadTraits() {
             try {
-                allTraits = TRAIT_DATA;
+                // Since the original data was 24 categories, but only 22 were listed, 
+                // re-initialize the data and recalculate total categories dynamically.
+                allTraits = TRAIT_DATA; 
+                // Recalculate total categories in case of data changes
+                const totalCategoriesFromData = allTraits.length;
+                
+                // Update the report button with the actual count from the data
+                document.getElementById('total-count').textContent = totalCategoriesFromData;
+
 
                 if (allTraits.length > 0) {
                     if (!currentCategoryKey) {
@@ -979,12 +872,13 @@
             const count = Object.keys(selectedTraits).length;
             const button = document.getElementById('generate-report-button');
             const countSpan = document.getElementById('selected-count');
+            const totalCategories = allTraits.length; // Get the real number of categories
             const totalSpan = document.getElementById('total-count');
 
             countSpan.textContent = count;
-            totalSpan.textContent = TOTAL_CATEGORIES;
+            totalSpan.textContent = totalCategories;
 
-            if (count === TOTAL_CATEGORIES) {
+            if (count === totalCategories) {
                 button.disabled = false;
             } else {
                 button.disabled = true;
@@ -1125,6 +1019,7 @@
         /**
          * Renders the details for the selected trait category.
          * @param {string} key The unique key of the selected category.
+         * * NOTE: Image-related HTML is removed here as requested.
          */
         function renderDetails(key) {
             const detailsContainer = document.getElementById('trait-details');
@@ -1148,31 +1043,20 @@
 
             // Render each feature within the category
             category.features.forEach(feature => {
-                const imageUrl = feature.image || 'https://placehold.co/300x200/cccccc/333333?text=Image+Missing';
                 const isSelected = feature.name === selectedFeatureName;
                 const featureTraitEscaped = feature.trait.replace(/'/g, "\\'").replace(/"/g, '\\"');
                 const featureNameEscaped = feature.name.replace(/'/g, "\\'").replace(/"/g, '\\"');
 
 
                 html += `
-                    <div class="feature-card flex flex-col sm:flex-row gap-4 p-4 mb-4 border-2 border-gray-300 rounded-xl bg-gray-50 hover:bg-white transition-all duration-300 transform cursor-pointer hover:scale-[1.01] 
+                    <div class="feature-card flex flex-col gap-4 p-4 mb-4 border-2 border-gray-300 rounded-xl bg-gray-50 hover:bg-white transition-all duration-300 transform cursor-pointer hover:scale-[1.01] 
                         ${isSelected ? 'selected-feature' : ''}"
                         onclick="selectFeature('${category.key}', '${featureNameEscaped}', '${featureTraitEscaped}')">
 
-                        <!-- Image Column -->
-                        <div class="sm:w-1/4 w-full flex-shrink-0 relative">
-                            <img src="${imageUrl}" 
-                                alt="${feature.name}" 
-                                class="w-full h-auto object-cover rounded-lg shadow-md border-2 ${isSelected ? 'border-red-600' : 'border-red-500'}"
-                                onerror="this.onerror=null;this.src='https://placehold.co/300x200/ef4444/ffffff?text=N/A';"
-                            />
-                            ${isSelected ? '<div class="absolute top-0 right-0 m-1 p-1 bg-red-600 rounded-full text-white shadow-xl">✔</div>' : ''}
-                        </div>
-                        
-                        <!-- Text Content Column -->
-                        <div class="sm:w-3/4">
+                        <div class="w-full relative">
                             <h3 class="text-xl font-bold ${isSelected ? 'text-red-700' : 'text-gray-900'} mb-1">${feature.name}</h3>
                             <p class="text-gray-700 text-sm leading-relaxed">${feature.trait}</p>
+                            ${isSelected ? '<div class="absolute top-0 right-0 m-1 p-1 bg-red-600 rounded-full text-white shadow-xl">✔</div>' : ''}
                         </div>
                     </div>
                 `;
@@ -1186,12 +1070,13 @@
          */
         function generateReport() {
             let reportHtml = '';
+            const totalCategories = allTraits.length; // Get the real number of categories
             
             // 1. Check if all required traits are selected
-            if (Object.keys(selectedTraits).length !== TOTAL_CATEGORIES) {
+            if (Object.keys(selectedTraits).length !== totalCategories) {
                  reportHtml = `
                     <p class="text-red-500 font-bold text-lg">
-                        Error: Please select one feature from all ${TOTAL_CATEGORIES} categories before generating the report.
+                        Error: Please select one feature from all ${totalCategories} categories before generating the report.
                     </p>
                  `;
             } else {
