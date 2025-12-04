@@ -31,129 +31,76 @@
         .active-trait-item:hover {
             background-color: #dc2626; /* red-600 */
         }
-        
-        /* Style for SELECTED feature cards */
-        .selected-feature {
-            border-color: #1f2937; /* Gray-800 border for strong selection */
-            background-color: #fee2e2; /* Red-100 background */
-            box-shadow: 0 0 0 3px #ef4444; /* Red highlight ring */
-            transform: scale(1.02);
-        }
-        .selected-feature:hover {
-            transform: scale(1.03) !important;
+
+        /* Default layout: Desktop/Wide */
+        .list-view, .report-view {
+            display: block; /* Default to showing both panes side-by-side */
         }
 
-        /* Paper Style Effect on Panels */
-        .paper-panel {
-            box-shadow: 
-                0 10px 15px -3px rgba(0, 0, 0, 0.1), 
-                0 4px 6px -2px rgba(0, 0, 0, 0.05),
-                8px 8px 0px 0px #1f2937; /* Dark shadow offset for sporty, framed look */
-            transition: all 0.3s;
-        }
-        .paper-panel:hover {
-            box-shadow: 
-                0 20px 25px -5px rgba(0, 0, 0, 0.1), 
-                0 10px 10px -5px rgba(0, 0, 0, 0.04),
-                12px 12px 0px 0px #1f2937; 
+        /* Mobile layout overrides: Narrow screen/Mobile view */
+        @media (max-width: 768px) {
+            .mobile-only { display: block !important; }
+            .desktop-only { display: none !important; }
+
+            /* By default, hide one view on mobile and show the other */
+            .list-view-mobile-hidden { display: none; }
+            .report-view-mobile-hidden { display: none; }
         }
 
-        /* Responsive Visibility Classes (Kept for Mobile-First Functionality) */
-        #list-panel { display: none; }
-        .show-list #list-panel { display: block; }
-        .show-list #details-panel, .show-list #report-panel { display: none; }
-        
-        .show-details #list-panel, .show-details #report-panel { display: none; }
-        .show-details #details-panel { display: block; }
-
-        .show-report #list-panel, .show-report #details-panel { display: none; }
-        .show-report #report-panel { display: block; }
-
-        @media (min-width: 1024px) {
-            #list-panel, #details-panel, #report-panel { display: block !important; }
-            .show-list #list-panel, .show-details #list-panel, .show-report #list-panel { display: block; }
-            /* Desktop Layout adjustment for report */
-            .show-report #details-panel { display: none !important; } /* Hide details when report is shown on desktop */
-            .show-report #report-panel { display: block; } /* Show report on desktop */
-        }
+        /* Utility class to show only on desktop */
+        .desktop-only { display: block; }
+        /* Utility class to hide on desktop (initially hidden, shown on mobile override) */
+        .mobile-only { display: none; }
     </style>
 </head>
-<body class="bg-gray-200 font-sans antialiased" style="font-family: 'Roboto Mono', monospace, sans-serif;">
+<body class="bg-gray-100 min-h-screen text-gray-800 font-[Roboto Mono]">
 
-    <div class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
-        <header class="mb-8 p-6 bg-white rounded-xl paper-panel flex flex-col sm:flex-row justify-between items-center transform hover:scale-[1.01]">
-            <div>
-                <h1 class="text-4xl font-extrabold text-gray-900 border-b-4 border-red-500 pb-2 inline-block">
-                    TRAIT ANALYSIS DASHBOARD
-                </h1>
-                <p class="text-gray-600 mt-2 text-sm">
-                    FAST TRACK REPORT: Select one feature per category to generate a personalized report.
+    <!-- Main Container: Split View for Desktop, Stacked for Mobile -->
+    <div id="app-container" class="md:flex h-screen overflow-hidden">
+        
+        <!-- Trait Selection List (Left Pane - Always visible on desktop) -->
+        <div id="list-pane" class="list-view w-full md:w-1/2 lg:w-2/5 xl:w-1/3 bg-white p-6 shadow-2xl overflow-y-auto custom-scrollbar">
+            <h1 class="text-3xl font-extrabold text-red-600 mb-2">Face Trait Analyzer</h1>
+            <p class="text-sm text-gray-500 mb-6 border-b pb-4">Select the feature that best describes each area below to generate your personality profile.</p>
+            
+            <div id="trait-list" class="space-y-6">
+                <!-- Traits will be dynamically loaded here -->
+            </div>
+
+            <div class="mt-8 pt-4 border-t border-gray-200">
+                <button id="generate-report-button" class="w-full py-3 px-4 bg-red-600 text-white font-bold rounded-xl shadow-lg hover:bg-red-700 transition duration-150 transform hover:scale-[1.01]">
+                    Generate Profile Report
+                </button>
+                <p id="selection-status" class="text-xs text-red-500 mt-2 text-center hidden">
+                    Please select one feature for every trait before generating the report.
                 </p>
             </div>
+        </div>
+
+        <!-- Report Display (Right Pane - Always visible on desktop) -->
+        <div id="report-pane" class="report-view flex-1 bg-gray-50 p-6 md:p-8 overflow-y-auto custom-scrollbar">
             
-            <button id="generate-report-button" class="mt-4 sm:mt-0 px-6 py-3 bg-red-600 text-white font-bold rounded-lg shadow-xl uppercase transition-all duration-300 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                Generate Report (<span id="selected-count">0</span>/<span id="total-count">24</span>)
+            <button id="back-button" class="mobile-only mb-4 py-2 px-4 bg-gray-200 text-gray-700 font-bold rounded-lg hover:bg-gray-300 transition duration-150">
+                &larr; Back to Selection
             </button>
-        </header>
 
-        <main id="app-container" class="flex flex-col lg:flex-row gap-8 show-list">
-            
-            <div id="list-panel" class="lg:w-1/3 w-full">
-                <div class="bg-white p-4 rounded-xl paper-panel h-full lg:max-h-[75vh] overflow-y-auto custom-scrollbar">
-                    <h2 class="text-xl font-bold mb-3 text-gray-800 border-b-2 border-gray-200 pb-2 uppercase tracking-wider">
-                        Categories
-                    </h2>
-
-                    <div class="mb-4">
-                        <input type="text" id="trait-search" placeholder="Search categories..." 
-                               class="w-full p-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-red-500 transition-colors text-sm text-gray-800"
-                               oninput="filterTraitList(this.value)">
-                    </div>
-
-                    <ul id="trait-list" class="space-y-2">
-                        </ul>
+            <h2 class="text-2xl font-bold text-gray-700 mb-4 desktop-only">Generated Analysis Report</h2>
+            <div id="report-content" class="space-y-6">
+                <div class="p-6 bg-white border border-gray-200 rounded-xl shadow-md text-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 mx-auto text-red-500 mb-3">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.254-1.353 2.825-1.353 4.475C2.75 21.087 4.713 22.5 7.125 22.5h9.75c2.412 0 4.375-1.413 4.375-3.824 0-1.65-.487-3.221-1.353-4.475m-3.719-3.417c.319.46.495 1.05.495 1.666v.75c0 .356.168.708.484.978.319.26.712.431 1.139.517a1 1 0 001.27-.478l.478-.813c.27-.457.447-1.015.516-1.613a1 1 0 00-1.298-1.22l-.462.154" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-15a7.5 7.5 0 007.5-7.5z" />
+                    </svg>
+                    <p class="text-gray-500">
+                        Select features on the left and click "Generate Report" to see your personalized analysis.
+                    </p>
                 </div>
             </div>
-
-            <div id="details-panel" class="lg:w-2/3 w-full">
-                <div id="trait-details-container" class="bg-white p-6 rounded-xl paper-panel lg:min-h-[75vh] flex flex-col">
-                    <div class="flex justify-between lg:hidden mb-4">
-                        <button id="back-button" class="flex items-center p-2 text-white font-bold bg-gray-800 rounded-lg shadow-lg hover:bg-gray-700 transition-colors uppercase text-sm">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
-                            </svg>
-                            BACK
-                        </button>
-                    </div>
-
-                    <div id="trait-details">
-                        <p class="text-xl text-gray-500 text-center py-10">
-                            Select a category on the left to start analyzing traits.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <div id="report-panel" class="lg:w-2/3 w-full hidden">
-                <div class="bg-white p-6 rounded-xl paper-panel lg:min-h-[75vh] flex flex-col">
-                    <h2 class="text-3xl font-bold text-red-600 mb-4 uppercase border-b-4 border-red-500 pb-2">
-                        PERSONALIZED TRAIT REPORT
-                    </h2>
-                    <div id="report-content" class="space-y-6">
-                        <p class="text-gray-500">Your personalized analysis will appear here once all traits are selected.</p>
-                        </div>
-                    
-                    <button onclick="changeView('details')" class="lg:hidden mt-6 px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors">
-                        Return to Selection
-                    </button>
-                </div>
-            </div>
-
-        </main>
+        </div>
     </div>
 
     <script>
-        // --- EMBEDDED TRAIT DATA (REFRACTORED - IMAGES REMOVED) ---
+        // --- Trait Data Definition ---
         const TRAIT_DATA = [
    {
       "name":"Nostril Shape (Financial Perspective)",
@@ -1069,360 +1016,243 @@
       ]
    }
 ];
+        
+        // Trait selection and state management (user-specific data)
+        let selectedTraits = {}; // Key: trait_key, Value: {name: feature_name, trait: description, pros: pros, cons: cons}
+        let isMobileView = window.innerWidth <= 768; // Initial check for mobile view
 
-        // --- END EMBEDDED TRAIT DATA ---
-
-
-        // Global state variables
-        let allTraits = [];
-        let currentCategoryKey = null;
-        // The selectedTraits object will now be transient (not saved)
-        let selectedTraits = {}; // Key-value pairs: { categoryKey: { name: "...", trait: "..." } }
-
-        // NOTE: Hardcoding TOTAL_CATEGORIES based on the provided data set (24 categories)
-        const TOTAL_CATEGORIES = 24; 
+        // --- Utility Functions ---
 
         /**
-         * Checks the screen size and updates the view visibility.
-         */
-        function checkScreenSize() {
-            updateVisibility();
-        }
-
-        /**
-         * Utility function to switch the view between list, details, and report.
-         * @param {string} view 'list', 'details', or 'report'
-         */
-        function changeView(view) {
-            const container = document.getElementById('app-container');
-            container.classList.remove('show-list', 'show-details', 'show-report');
-            container.classList.add(`show-${view}`);
-            updateVisibility();
-        }
-
-        /**
-         * Loads the data and initializes the application.
-         */
-        function loadTraits() {
-            try {
-                // Since the original data was 24 categories, but only 22 were listed, 
-                // re-initialize the data and recalculate total categories dynamically.
-                allTraits = TRAIT_DATA; 
-                // Recalculate total categories in case of data changes
-                const totalCategoriesFromData = allTraits.length;
-                
-                // Update the report button with the actual count from the data
-                document.getElementById('total-count').textContent = totalCategoriesFromData;
-
-
-                if (allTraits.length > 0) {
-                    if (!currentCategoryKey) {
-                        currentCategoryKey = allTraits[0].key;
-                    }
-                    renderTraitList();
-                    renderDetails(currentCategoryKey);
-                    updateReportButton(); // Initialize button state
-                    changeView('list'); // Start at the list view
-                } else {
-                    displayError('The trait data variable is empty.');
-                }
-            } catch (error) {
-                console.error('Error processing traits data:', error);
-                displayError(`Failed to process internal TRAIT_DATA. Error: ${error.message}`);
-            }
-        }
-
-        /**
-         * Updates the visibility of the list, details, and report panels based on screen size and current state (mobile-first navigation).
+         * Dynamically updates the visibility of the list and report panes based on 
+         * mobile view state and the currently active view.
+         * @param {string} view - 'list' or 'report'
          */
         function updateVisibility() {
-            const container = document.getElementById('app-container');
-            
-            // Update mobile view based on the current class
-            if (window.innerWidth < 1024) {
-                // On mobile, the active class determines which panel is shown
-                // CSS handles the display based on .show-list, .show-details, .show-report
-            } else {
-                // On desktop, the report panel should replace the details panel 
-                // when in 'show-report' mode, otherwise both list and details show.
-                if (container.classList.contains('show-report')) {
-                    document.getElementById('details-panel').style.display = 'none';
-                    document.getElementById('report-panel').style.display = 'block';
+            const listPane = document.getElementById('list-pane');
+            const reportPane = document.getElementById('report-pane');
+            const listViewClass = 'list-view-mobile-hidden';
+            const reportViewClass = 'report-view-mobile-hidden';
+
+            if (isMobileView) {
+                if (listPane.classList.contains(listViewClass)) {
+                    // Report is showing, List is hidden
+                    listPane.style.display = 'none';
+                    reportPane.style.display = 'block';
                 } else {
-                    document.getElementById('details-panel').style.display = 'block';
-                    document.getElementById('report-panel').style.display = 'none';
+                    // List is showing, Report is hidden
+                    listPane.style.display = 'block';
+                    reportPane.style.display = 'none';
                 }
-            }
-        }
-        
-        /**
-         * Updates the state of the "Generate Report" button based on selections.
-         */
-        function updateReportButton() {
-            const count = Object.keys(selectedTraits).length;
-            const button = document.getElementById('generate-report-button');
-            const countSpan = document.getElementById('selected-count');
-            const totalCategories = allTraits.length; // Get the real number of categories
-            const totalSpan = document.getElementById('total-count');
-
-            countSpan.textContent = count;
-            totalSpan.textContent = totalCategories;
-
-            if (count === totalCategories) {
-                button.disabled = false;
             } else {
-                button.disabled = true;
+                // Desktop: always show both
+                listPane.style.display = 'block';
+                reportPane.style.display = 'block';
             }
         }
 
         /**
-         * Handles the selection/deselection of a feature card.
-         * @param {string} categoryKey The key of the category.
-         * @param {string} featureName The name of the feature.
-         * @param {string} featureTrait The description/trait of the feature.
+         * Changes the active view on mobile.
+         * @param {string} newView - 'list' or 'report'
          */
-        window.selectFeature = function(categoryKey, featureName, featureTrait) {
-            // Store the selection in the global state
-            selectedTraits[categoryKey] = {
-                name: featureName,
-                trait: featureTrait
-            };
-            
-            // Re-render the current details panel to update selection highlights
-            renderDetails(categoryKey);
-            
-            // Update the state of the list and the report button
-            renderTraitList();
-            updateReportButton();
+        function changeView(newView) {
+            const listPane = document.getElementById('list-pane');
+            const reportPane = document.getElementById('report-pane');
+            const listViewClass = 'list-view-mobile-hidden';
+            const reportViewClass = 'report-view-mobile-hidden';
+
+            if (newView === 'report') {
+                listPane.classList.add(listViewClass);
+                reportPane.classList.remove(reportViewClass);
+            } else {
+                listPane.classList.remove(listViewClass);
+                reportPane.classList.add(reportViewClass);
+            }
+            updateVisibility();
         }
 
-
         /**
-         * Filters the trait list based on user input.
-         * @param {string} searchTerm The text entered in the search box.
+         * Checks screen size and updates the isMobileView state.
          */
-        window.filterTraitList = function(searchTerm) {
-            const listElement = document.getElementById('trait-list');
-            const term = searchTerm.toLowerCase();
-
-            for (const category of allTraits) {
-                const categoryElement = listElement.querySelector(`[data-key="${category.key}"]`);
-                if (!categoryElement) continue;
-
-                // Check if the category name itself contains the search term
-                const categoryNameMatch = category.name.toLowerCase().includes(term);
-
-                // Check if any feature name or trait description contains the search term
-                const featureMatch = category.features.some(feature =>
-                    feature.name.toLowerCase().includes(term) ||
-                    feature.trait.toLowerCase().includes(term)
-                );
-
-                if (categoryNameMatch || featureMatch) {
-                    categoryElement.style.display = 'flex'; // Use flex because of the badge
-                } else {
-                    categoryElement.style.display = 'none';
+        function checkScreenSize() {
+            const wasMobile = isMobileView;
+            isMobileView = window.innerWidth <= 768;
+            
+            // If we transition between desktop/mobile, ensure correct view is set.
+            if (wasMobile !== isMobileView) {
+                // Reset views to default on desktop transition
+                if (!isMobileView) {
+                    document.getElementById('list-pane').classList.remove('list-view-mobile-hidden');
+                    document.getElementById('report-pane').classList.remove('report-view-mobile-hidden');
                 }
+                updateVisibility();
             }
         }
 
-
         /**
-         * Displays an error message in the main content area.
+         * Renders the list of traits to the UI.
          */
-        function displayError(message) {
-            const detailsContainer = document.getElementById('trait-details');
-            detailsContainer.innerHTML = `
-                <div class="p-6 bg-red-100 border-l-4 border-red-500 text-red-700 rounded-lg">
-                    <p class="font-bold">Data Processing Error</p>
-                    <p>${message}</p>
-                </div>
-            `;
-        }
+        function loadTraits() {
+            const listContainer = document.getElementById('trait-list');
+            listContainer.innerHTML = ''; // Clear existing content
 
-
-        /**
-         * Renders the list of trait categories in the sidebar.
-         */
-        function renderTraitList() {
-            const listElement = document.getElementById('trait-list');
-            listElement.innerHTML = '';
-
-            allTraits.forEach(category => {
-                const isActive = category.key === currentCategoryKey;
-                const isSelected = selectedTraits.hasOwnProperty(category.key);
-
-                const listItem = document.createElement('li');
-                listItem.className = `
-                    p-3 cursor-pointer rounded-lg transition-all duration-300 flex justify-between items-center
-                    ${isActive ? 'active-trait-item' : 'text-gray-700 hover:bg-red-50 hover:shadow-inner'}
-                    ${isSelected && !isActive ? 'bg-green-100 text-gray-800 border-l-4 border-green-500 hover:bg-green-200' : ''}
+            TRAIT_DATA.forEach(traitCategory => {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'bg-gray-50 p-4 rounded-xl shadow-inner border border-gray-200';
+                categoryDiv.innerHTML = `
+                    <h3 class="text-lg font-bold text-red-600 mb-2">${traitCategory.name}</h3>
+                    <p class="text-sm text-gray-500 mb-3">${traitCategory.description}</p>
+                    <div id="features-${traitCategory.key}" class="space-y-2">
+                        <!-- Features go here -->
+                    </div>
                 `;
-                
-                // Icon/Name container
-                const contentDiv = document.createElement('div');
-                contentDiv.className = 'flex items-center';
+                listContainer.appendChild(categoryDiv);
 
-                // Checkmark icon if selected
-                if (isSelected) {
-                    contentDiv.innerHTML += `
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-green-600" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                        </svg>
-                    `;
-                }
-                
-                // Add category name
-                const nameSpan = document.createElement('span');
-                nameSpan.textContent = category.name;
-                contentDiv.appendChild(nameSpan);
-                listItem.appendChild(contentDiv);
+                const featuresContainer = categoryDiv.querySelector(`#features-${traitCategory.key}`);
 
+                traitCategory.features.forEach(feature => {
+                    const featureButton = document.createElement('button');
+                    featureButton.type = 'button';
+                    featureButton.dataset.key = traitCategory.key;
+                    featureButton.dataset.name = feature.name;
+                    featureButton.className = 'w-full text-left p-3 text-sm bg-white border border-gray-300 rounded-lg hover:bg-red-50 transition duration-100 ease-in-out shadow-sm';
+                    featureButton.textContent = feature.name;
 
-                // Add feature count badge (visual enhancement)
-                const countBadge = document.createElement('span');
-                countBadge.className = `
-                    text-xs font-mono px-2 py-0.5 rounded-full 
-                    ${isActive ? 'bg-white text-red-500' : 'bg-red-200 text-red-700'}
-                `;
-                countBadge.textContent = category.features.length;
-                listItem.appendChild(countBadge);
-
-
-                listItem.dataset.key = category.key;
-
-                listItem.addEventListener('click', () => {
-                    currentCategoryKey = category.key;
-                    document.getElementById('trait-search').value = '';
-                    filterTraitList('');
-                    
-                    renderTraitList(); 
-                    renderDetails(currentCategoryKey);
-                    
-                    changeView('details'); 
+                    // Add click listener
+                    featureButton.addEventListener('click', () => handleTraitSelection(traitCategory.key, feature, featureButton));
+                    featuresContainer.appendChild(featureButton);
                 });
-
-                listElement.appendChild(listItem);
             });
+
+            // Initial check and setup
+            checkScreenSize();
+            updateVisibility();
         }
 
         /**
-         * Renders the details for the selected trait category.
-         * @param {string} key The unique key of the selected category.
-         * * NOTE: Image-related HTML is removed here as requested.
+         * Handles the selection of a feature, updating state and UI.
+         * @param {string} key - The category key (e.g., 'eye_shape')
+         * @param {object} feature - The selected feature object
+         * @param {HTMLElement} clickedButton - The button element that was clicked
          */
-        function renderDetails(key) {
-            const detailsContainer = document.getElementById('trait-details');
-            const category = allTraits.find(t => t.key === key);
-            const selectedFeatureName = selectedTraits[key]?.name;
+        function handleTraitSelection(key, feature, clickedButton) {
+            // 1. Update internal state
+            selectedTraits[key] = feature;
 
-            if (!category) {
-                detailsContainer.innerHTML = `
-                    <p class="text-xl text-gray-500 text-center py-10">
-                        Select a Trait Category from the list to view its details.
-                    </p>
+            // 2. Update UI for all buttons in that category
+            const featuresContainer = document.getElementById(`features-${key}`);
+            featuresContainer.querySelectorAll('button').forEach(btn => {
+                if (btn === clickedButton) {
+                    btn.classList.add('active-trait-item');
+                    btn.classList.remove('bg-white', 'border-gray-300', 'hover:bg-red-50');
+                } else {
+                    btn.classList.remove('active-trait-item');
+                    btn.classList.add('bg-white', 'border-gray-300', 'hover:bg-red-50');
+                }
+            });
+            
+            // 3. Update status message
+            const allSelected = TRAIT_DATA.every(trait => selectedTraits[trait.key]);
+            const statusMessage = document.getElementById('selection-status');
+            if (allSelected) {
+                statusMessage.classList.add('hidden');
+            } else {
+                // Keep status hidden until user tries to generate report without full selection
+            }
+        }
+
+        /**
+         * Generates and displays the final report.
+         */
+        function generateReport() {
+            const requiredCount = TRAIT_DATA.length;
+            const selectedCount = Object.keys(selectedTraits).length;
+            const statusMessage = document.getElementById('selection-status');
+
+            if (selectedCount < requiredCount) {
+                statusMessage.classList.remove('hidden');
+                // Brief message box instead of alert()
+                const reportContent = document.getElementById('report-content');
+                reportContent.innerHTML = `
+                    <div class="p-6 bg-yellow-100 border border-yellow-400 rounded-xl shadow-md">
+                        <p class="font-bold text-yellow-700">Incomplete Selection</p>
+                        <p class="text-sm text-yellow-600">Please select one feature for all ${requiredCount} trait categories. You have selected ${selectedCount}.</p>
+                    </div>
                 `;
+                changeView('report'); // Switch to report view to show the error on mobile
+                updateVisibility();
                 return;
             }
 
-            // Start building the HTML for the details view
-            let html = `
-                <h2 class="text-2xl font-bold text-red-600 mb-2 uppercase border-b-2 border-gray-200 pb-1">${category.name}</h2>
-                <p class="text-gray-700 mb-6 italic">${category.description}</p>
-            `;
+            statusMessage.classList.add('hidden'); // Hide status message on success
 
-            // Render each feature within the category
-            category.features.forEach(feature => {
-                const isSelected = feature.name === selectedFeatureName;
-                const featureTraitEscaped = feature.trait.replace(/'/g, "\\'").replace(/"/g, '\\"');
-                const featureNameEscaped = feature.name.replace(/'/g, "\\'").replace(/"/g, '\\"');
+            // --- Report Logic ---
+            const allPros = [];
+            const allCons = [];
+            const relationshipSummary = [];
+            const financialSummary = [];
+            const longevitySummary = [];
 
-
-                // Example change for renderDetails (inside the feature loop):
-html += `
-    <div class="feature-card..." onclick="...">
-        <h3 class="text-xl font-bold ...">${feature.name}</h3>
-        <p class="text-gray-700 text-sm leading-relaxed mb-2">Summary: ${feature.trait}</p>
-        <div class="flex space-x-4 text-xs font-mono">
-            <p class="text-green-600 font-bold">PROS: <span class="font-normal">${feature.pros}</span></p>
-            <p class="text-red-600 font-bold">CONS: <span class="font-normal">${feature.cons}</span></p>
-        </div>
-        ${isSelected ? '...' : ''}
-    </div>
-`;
-
-            });
-
-            document.getElementById('trait-details').innerHTML = html;
-        }
-
-        /**
-         * Generates and displays the final report based on selected traits.
-         */
-        function generateReport() {
-            let reportHtml = '';
-            const totalCategories = allTraits.length; // Get the real number of categories
-            
-            // 1. Check if all required traits are selected
-            if (Object.keys(selectedTraits).length !== totalCategories) {
-                 reportHtml = `
-                    <p class="text-red-500 font-bold text-lg">
-                        Error: Please select one feature from all ${totalCategories} categories before generating the report.
-                    </p>
-                 `;
-            } else {
-                // 2. Build the main report content
-                reportHtml += `
-                    <h3 class="text-2xl font-extrabold text-gray-900 border-b-2 border-gray-800 pb-2 mb-4">
-                        CORE PROFILE SUMMARY
-                    </h3>
-                `;
-
-                // Calculate summary points (e.g., Financial, Longevity, Endurance)
-                let financialSummary = [];
-                let longevitySummary = [];
-
-                for (const key in selectedTraits) {
-                    const selected = selectedTraits[key];
-                    const category = allTraits.find(t => t.key === key);
-                    
-                    if (category) {
-                        reportHtml += `
-                            <div class="border-l-4 border-red-500 pl-4 py-2 bg-gray-50 rounded-md">
-                                <p class="text-lg font-bold text-gray-800">${category.name}</p>
-                                <p class="text-red-600 italic font-mono text-sm mb-1">${selected.name}</p>
-                                <p class="text-gray-700 text-sm">${selected.trait}</p>
-                            </div>
-                        `;
-                        
-                        // Simple Keyword Analysis for summary
-                        const traitLower = selected.trait.toLowerCase();
-                        if (traitLower.includes('financial') || traitLower.includes('spending') || traitLower.includes('wealth')) {
-                            financialSummary.push(selected.name.replace(/\s*\(.*\)\s*/, ''));
-                        }
-                        if (traitLower.includes('longevity') || traitLower.includes('lifespan') || traitLower.includes('endurance')) {
-                            longevitySummary.push(selected.name.replace(/\s*\(.*\)\s*/, ''));
-                        }
-                    }
-                }
+            for (const key in selectedTraits) {
+                const feature = selectedTraits[key];
                 
-                // Add Consolidated Summary Section
-                reportHtml += `
-                    <h3 class="text-2xl font-extrabold text-gray-900 border-b-2 border-red-500 pb-2 pt-4 mb-4 mt-6">
-                        CONSOLIDATED ANALYSIS
-                    </h3>
-                    <div class="space-y-4 text-gray-800">
-                        <div class="p-4 bg-red-50 rounded-lg border-l-4 border-red-500">
-                            <p class="font-bold text-red-700">Financial Tendency:</p>
-                            <p>${financialSummary.length > 0 ? financialSummary.join(' and ') + '.' : 'No strong financial tendencies detected.'}</p>
-                        </div>
-                        <div class="p-4 bg-red-50 rounded-lg border-l-4 border-red-500">
-                            <p class="font-bold text-red-700">Longevity/Endurance Focus:</p>
-                            <p>${longevitySummary.length > 0 ? longevitySummary.join(' and ') + '. Requires attention to long-term stability.' : 'Focus on agile action and stability.'}</p>
-                        </div>
-                    </div>
-                `;
+                // Collect pros and cons
+                allPros.push(feature.pros);
+                allCons.push(feature.cons);
+
+                // Group-specific summaries
+                if (key === 'love' || key === 'deceit') {
+                    relationshipSummary.push(feature.name.replace(/ \(.*/, '')); // Use feature name without parenthesis
+                }
+                if (key === 'nostril_shape' || key === 'wealth') {
+                    financialSummary.push(feature.name.replace(/ \(.*/, ''));
+                }
+                if (key === 'earlobes' || key === 'vitality' || key === 'jawline') {
+                    longevitySummary.push(feature.name.replace(/ \(.*/, ''));
+                }
             }
+
+            // Create the Report HTML
+            let reportHtml = `
+                <div class="p-6 bg-red-600 text-white rounded-xl shadow-xl mb-6">
+                    <h3 class="text-2xl font-bold">Your Comprehensive Trait Profile</h3>
+                    <p class="text-sm mt-1 opacity-90">Based on your selections across ${requiredCount} major facial areas.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <!-- Pros Card -->
+                    <div class="p-5 bg-green-50 rounded-xl border border-green-200 shadow-md">
+                        <h4 class="text-xl font-bold text-green-700 mb-3">Strengths & Potential (<span class="font-mono text-green-900">${allPros.length} Total</span>)</h4>
+                        <ul class="list-disc list-inside text-sm space-y-2">
+                            ${allPros.map(p => `<li class="text-gray-700">${p}</li>`).join('')}
+                        </ul>
+                    </div>
+                    
+                    <!-- Cons Card -->
+                    <div class="p-5 bg-red-50 rounded-xl border border-red-200 shadow-md">
+                        <h4 class="text-xl font-bold text-red-700 mb-3">Challenges & Areas for Growth (<span class="font-mono text-red-900">${allCons.length} Total</span>)</h4>
+                        <ul class="list-disc list-inside text-sm space-y-2">
+                            ${allCons.map(c => `<li class="text-gray-700">${c}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+
+                <h4 class="text-xl font-bold text-gray-700 mt-8 mb-4 border-b pb-2">Key Areas Focus</h4>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                    <div class="p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
+                        <p class="font-bold text-blue-700">Relationship Focus:</p>
+                        <p>${relationshipSummary.length > 0 ? relationshipSummary.join(' and ') + '.' : 'No strong relationship features detected.'}</p>
+                    </div>
+                    <div class="p-4 bg-green-50 rounded-lg border-l-4 border-green-500">
+                        <p class="font-bold text-green-700">Financial Tendency:</p>
+                        <p>${financialSummary.length > 0 ? financialSummary.join(' and ') + '.' : 'No strong financial tendencies detected.'}</p>
+                    </div>
+                    <div class="p-4 bg-red-50 rounded-lg border-l-4 border-red-500">
+                        <p class="font-bold text-red-700">Longevity/Endurance Focus:</p>
+                        <p>${longevitySummary.length > 0 ? longevitySummary.join(' and ') + '. Requires attention to long-term stability.' : 'Focus on agile action and stability.'}</p>
+                    </div>
+                </div>
+            `;
 
             document.getElementById('report-content').innerHTML = reportHtml;
             changeView('report'); // Switch to the report view
