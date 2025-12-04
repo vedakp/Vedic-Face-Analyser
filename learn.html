@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Physiognomy Learning Hub (Minimalist & Sporty)</title>
+    <title>Physiognomy Hub + Contextual Prompts</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Custom Styles for Sporty/Minimalist Aesthetic */
@@ -13,6 +13,8 @@
             --accent-primary: #00BCD4; /* Electric Cyan/Blue */
             --text-light: #f0f0f0; 
             --text-muted: #aaaaaa;
+            --success-color: #4CAF50;
+            --error-color: #F44336;
         }
         body {
             font-family: 'Inter', sans-serif;
@@ -28,8 +30,8 @@
         }
         .card {
             background-color: var(--card-bg);
-            border-radius: 0.75rem; /* Slightly reduced rounding */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Subtle dark shadow */
+            border-radius: 0.75rem; 
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); 
         }
         /* Score boxes: High-contrast, dynamic feel */
         .score-box {
@@ -40,7 +42,7 @@
             cursor: pointer;
         }
         .score-box:hover {
-            transform: scale(1.05); /* Aggressive hover scale for sporty feel */
+            transform: scale(1.05); 
             border-color: var(--accent-primary);
             box-shadow: 0 0 15px var(--accent-primary); 
         }
@@ -63,26 +65,45 @@
         .form-radio:checked:after {
             background-color: var(--accent-primary);
         }
-        /* Modal Styling */
+        /* Global Modal Styling */
         .modal-backdrop {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.9); /* Very dark backdrop */
+            background-color: rgba(0, 0, 0, 0.9); 
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 50;
         }
+        .modal-content {
+            padding: 1.5rem;
+            max-height: 90vh;
+            overflow-y: auto;
+            border-radius: 0.75rem;
+        }
+        /* Loading Spinner */
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top: 4px solid var(--accent-primary);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body class="p-4 sm:p-6">
 
-    <div id="app" class="app-container w-full max-w-3xl mx-auto">
+    <div id="app" class="app-container w-full max-w-4xl mx-auto">
         <h1 class="text-3xl sm:text-4xl font-extrabold text-white my-8 tracking-wider text-center">
-            PHYSIOGNOMY ANALYZER <span style="color: var(--accent-primary);">/ 8X</span>
+            PHYSIOGNOMY HUB <span style="color: var(--accent-primary);">/ LEARNING</span>
         </h1>
         
         <!-- Main Content -->
@@ -139,22 +160,37 @@
             <!-- 2. Learning View (Flashcards) -->
             <div id="view-learn" class="hidden w-full">
                  <h2 class="text-xl font-bold text-white mb-4">Learning Module (Flashcards)</h2>
-                 <div id="flashcard-container" class="card p-6 min-h-[300px] flex flex-col justify-between border-2 border-gray-700">
-                    <!-- Flashcard content -->
-                    <div class="flex-grow flex flex-col items-center justify-center text-center">
+                 <div class="card p-6 min-h-[300px] flex flex-col justify-between border-2 border-gray-700">
+                     
+                    <!-- Flashcard Feature Display -->
+                    <div id="flashcard-content" class="flex-grow flex flex-col items-center justify-center text-center">
                         <p class="text-sm font-light mb-2 uppercase" style="color: var(--accent-primary);" id="flashcard-category"></p>
-                        <h3 class="text-3xl font-black text-white mb-6" id="flashcard-feature">Click Start Learning!</h3>
+                        <h3 class="text-3xl font-black text-white mb-6" id="flashcard-feature">Click Next Feature &rarr;</h3>
                         
-                        <div id="flashcard-interpretation-box" class="hidden mt-4 p-4 border-l-4 border-[#4CAF50] bg-[#333] rounded-lg max-w-md transition duration-300">
+                        <!-- Trait Insight (Interpretation) - NOW ALWAYS VISIBLE -->
+                        <div id="flashcard-interpretation-box" class="mt-4 p-4 border-l-4 border-[#4CAF50] bg-[#333] rounded-lg max-w-md transition duration-300">
+                             <h4 class="text-base font-bold text-white mb-2">Trait Insight</h4>
                              <p class="text-base text-gray-300" id="flashcard-interpretation"></p>
                         </div>
+                    </div>
+                    
+                    <!-- Image Generation Prompt -->
+                    <div id="image-gen-prompt-box" class="mt-8 p-4 bg-gray-800 rounded-lg border border-gray-700 space-y-3">
+                        <div class="flex justify-between items-center border-b border-gray-700 pb-2">
+                             <h4 class="text-sm font-bold uppercase text-gray-400">GenAI Visualization Prompt</h4>
+                             <button id="copy-prompt-btn" class="text-xs text-white px-2 py-1 rounded hover:bg-gray-700 transition duration-150 flex items-center">
+                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                     <path d="M7 9a2 2 0 012-2h6a2 2 0 012 2v6a2 2 0 01-2 2H9a2 2 0 01-2-2V9z" />
+                                     <path d="M5 3a2 2 0 00-2 2v6a2 2 0 002 2V5h8a2 2 0 00-2-2H5z" />
+                                 </svg>
+                                 Copy
+                             </button>
+                        </div>
+                        <p id="image-gen-prompt" class="text-xs text-gray-300 font-mono break-words"></p>
                     </div>
 
                     <!-- Controls -->
                     <div class="mt-8 space-y-3">
-                        <button id="reveal-btn" class="w-full py-3 bg-[#4CAF50] text-black font-extrabold rounded-lg shadow-md transition duration-200 hover:bg-[#66BB6A] focus:outline-none uppercase">
-                            Reveal Trait Insight
-                        </button>
                         <div class="flex space-x-3">
                              <button id="prev-btn" class="flex-1 py-3 bg-gray-700 text-white font-semibold rounded-lg transition duration-200 hover:bg-gray-600 focus:outline-none uppercase">
                                 &larr; Previous
@@ -226,6 +262,7 @@
                      </div>
                  </div>
             </div>
+
         </div>
     </div>
     
@@ -240,6 +277,15 @@
             <button id="modal-close-btn" class="w-full mt-6 py-3 bg-red-600 text-white font-bold rounded-lg hover:bg-red-500 uppercase">
                 Close
             </button>
+        </div>
+    </div>
+    
+    <!-- General Notification/Error Modal -->
+    <div id="alert-modal" class="modal-backdrop hidden">
+        <div class="modal-content w-full sm:max-w-sm border-t-4 bg-gray-800 p-6 shadow-2xl">
+            <h3 id="alert-title" class="text-xl font-bold mb-3">Notification</h3>
+            <p id="alert-message" class="mb-4 text-sm text-gray-300"></p>
+            <button id="alert-close-btn" class="w-full py-2 text-white font-bold rounded-lg uppercase"></button>
         </div>
     </div>
 
@@ -564,8 +610,34 @@
         let categories = Object.keys(physiognomyRules);
         let lastAnalysisData = null;
         let featureList = []; 
-
+        
         // --- Utility Functions ---
+
+        // Function to handle showing the general notification modal
+        function showAlert(title, message, isError = true) {
+            const modal = document.getElementById('alert-modal');
+            const modalTitle = document.getElementById('alert-title');
+            const modalMessage = document.getElementById('alert-message');
+            const closeBtn = document.getElementById('alert-close-btn');
+
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            
+            closeBtn.textContent = 'Acknowledge';
+
+            if (isError) {
+                modalTitle.style.color = 'var(--error-color)';
+                closeBtn.style.backgroundColor = 'var(--error-color)';
+                modal.querySelector('.modal-content').style.borderColor = 'var(--error-color)';
+            } else {
+                modalTitle.style.color = 'var(--success-color)';
+                closeBtn.style.backgroundColor = 'var(--success-color)';
+                modal.querySelector('.modal-content').style.borderColor = 'var(--success-color)';
+            }
+
+            modal.classList.remove('hidden');
+            closeBtn.onclick = () => modal.classList.add('hidden');
+        }
 
         // Function to calculate maximum possible scores for normalization
         function calculateMaxScores() {
@@ -582,6 +654,11 @@
             });
         }
         
+        // Function to capitalize trait names for display
+        function capitalizeTraitName(key) {
+            return key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        }
+        
         // --- Core Application Initialization and Logic ---
 
         function initializeApp() {
@@ -590,6 +667,7 @@
             const tabAnalyzer = document.getElementById('tab-analyzer');
             const tabLearn = document.getElementById('tab-learn');
             const tabCompare = document.getElementById('tab-compare');
+            
             const viewAnalyzer = document.getElementById('view-analyzer');
             const viewLearn = document.getElementById('view-learn');
             const viewCompare = document.getElementById('view-compare');
@@ -625,7 +703,7 @@
                     activeTab = tabAnalyzer; activeView = viewAnalyzer;
                 } else if (viewId === 'learn') {
                     activeTab = tabLearn; activeView = viewLearn;
-                    if (featureList.length > 0) updateFlashcard(0); // Reset flashcard view
+                    if (featureList.length > 0) updateFlashcard(currentFlashcardIndex); // Reset flashcard view, keep index
                 } else if (viewId === 'compare') {
                     activeTab = tabCompare; activeView = viewCompare;
                     const categorySelect = document.getElementById('compare-category-select');
@@ -769,10 +847,6 @@
                 renderResults(finalPercentages, interpretations);
             }
             
-            function capitalizeTraitName(key) {
-                return key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-            }
-
             function renderResults(percentages, interpretations) {
                 const scoreGrid = document.getElementById('score-grid');
                 const interpretationList = document.getElementById('interpretation-list');
@@ -873,41 +947,66 @@
             const flashcardCategory = document.getElementById('flashcard-category');
             const flashcardFeature = document.getElementById('flashcard-feature');
             const flashcardInterpretation = document.getElementById('flashcard-interpretation');
-            const flashcardInterpretationBox = document.getElementById('flashcard-interpretation-box');
-            const revealBtn = document.getElementById('reveal-btn');
-            const prevBtn = document.getElementById('prev-btn');
             const nextBtn = document.getElementById('next-btn');
+            const prevBtn = document.getElementById('prev-btn');
+            const copyPromptBtn = document.getElementById('copy-prompt-btn');
+            const imageGenPrompt = document.getElementById('image-gen-prompt');
+            
             let currentFlashcardIndex = 0;
+            
+            function generateImagePrompt(category, label, interpretation) {
+                const featureName = label.split('(')[0].trim();
+                
+                // Extract main descriptive keywords, favoring the first few words of the label
+                const descriptiveWords = featureName.toLowerCase().split(/\s+/).slice(0, 3);
+                
+                let promptBase = `A close-up, hyper-detailed portrait of a character with a prominent ${category.toLowerCase()}, specifically featuring a "${featureName}".`;
+                
+                // Add interpretative context for the AI
+                const context = interpretation.replace(/[,.]/g, '').toLowerCase().substring(0, 100);
+                promptBase += ` The character's expression should convey the psychological traits of being ${context}.`;
+                
+                // Add style modifiers
+                promptBase += ` Cinematic lighting, 8k, photorealistic, by a master painter, detailed, atmospheric, high contrast.`;
+                
+                return promptBase;
+            }
 
             function updateFlashcard(index) {
                 if (featureList.length === 0) {
-                    flashcardFeature.textContent = "No features loaded.";
+                    flashcardFeature.textContent = "No features loaded. Click Next Feature to start.";
+                    flashcardInterpretation.textContent = "Features are loaded from the embedded dataset.";
+                    imageGenPrompt.textContent = "The visualization prompt will appear here once a feature is loaded.";
+                    prevBtn.disabled = true;
+                    nextBtn.disabled = false;
+                    prevBtn.classList.add('opacity-50');
                     return;
                 }
-
+                
                 const feature = featureList[index];
-                flashcardCategory.textContent = feature.category;
+                flashcardCategory.textContent = `${feature.category} (${index + 1} / ${featureList.length})`;
                 flashcardFeature.textContent = feature.label;
                 flashcardInterpretation.textContent = feature.interpretation;
-                flashcardInterpretationBox.classList.add('hidden'); 
-                revealBtn.textContent = 'Reveal Trait Insight';
                 
                 prevBtn.disabled = index === 0;
                 nextBtn.disabled = index === featureList.length - 1;
                 prevBtn.classList.toggle('opacity-50', prevBtn.disabled);
                 nextBtn.classList.toggle('opacity-50', nextBtn.disabled);
                 
-                flashcardCategory.textContent = `${feature.category} (${index + 1} / ${featureList.length})`;
-            }
-
-            function toggleInterpretation() {
-                const isHidden = flashcardInterpretationBox.classList.toggle('hidden');
-                revealBtn.textContent = isHidden ? 'Reveal Trait Insight' : 'Hide Trait Insight';
+                // Update Image Generation Prompt
+                imageGenPrompt.textContent = generateImagePrompt(feature.category, feature.label, feature.interpretation);
             }
 
             function nextFlashcard() {
                 if (currentFlashcardIndex < featureList.length - 1) {
                     currentFlashcardIndex++;
+                    updateFlashcard(currentFlashcardIndex);
+                } else if (currentFlashcardIndex === featureList.length - 1) {
+                    // Loop back to the start if the end is reached
+                    currentFlashcardIndex = 0;
+                    updateFlashcard(currentFlashcardIndex);
+                } else {
+                    currentFlashcardIndex = 0; // Initialize if it was -1
                     updateFlashcard(currentFlashcardIndex);
                 }
             }
@@ -916,12 +1015,38 @@
                 if (currentFlashcardIndex > 0) {
                     currentFlashcardIndex--;
                     updateFlashcard(currentFlashcardIndex);
+                } else if (currentFlashcardIndex === 0 && featureList.length > 0) {
+                    // Loop to the end if the start is reached
+                     currentFlashcardIndex = featureList.length - 1;
+                     updateFlashcard(currentFlashcardIndex);
                 }
             }
             
-            revealBtn.addEventListener('click', toggleInterpretation);
+            function copyPromptToClipboard() {
+                const promptText = imageGenPrompt.textContent;
+                // Check if a prompt exists
+                if (promptText.includes('The visualization prompt will appear here')) {
+                    showAlert("No Prompt Loaded", "Please click 'Next Feature' to load a feature and its corresponding GenAI prompt before copying.", true);
+                    return;
+                }
+
+                // Use execCommand for broader compatibility in iframe environments
+                const textarea = document.createElement('textarea');
+                textarea.value = promptText;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    showAlert("Copied!", "Image generation prompt copied to clipboard. Paste it into your favorite GenAI tool!", false);
+                } catch (err) {
+                    showAlert("Copy Failed", "Could not automatically copy the prompt. Please manually select and copy the text.", true);
+                }
+                document.body.removeChild(textarea);
+            }
+            
             nextBtn.addEventListener('click', nextFlashcard);
             prevBtn.addEventListener('click', prevFlashcard);
+            copyPromptBtn.addEventListener('click', copyPromptToClipboard);
             
             // --- 6. Comparison Logic ---
             const compareCategorySelect = document.getElementById('compare-category-select');
@@ -1076,10 +1201,13 @@
                 interpretationHTML += '</div>';
                 comparisonGrid.innerHTML += interpretationHTML;
             }
-
-
+            
             // Run initial setup
             renderInputFields();
+            
+            // Initialize flashcard view content
+            updateFlashcard(currentFlashcardIndex);
+
             switchView('analyzer'); 
         }
 
